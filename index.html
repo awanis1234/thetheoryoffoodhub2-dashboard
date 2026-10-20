@@ -1,0 +1,2680 @@
+﻿<!DOCTYPE html>
+
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SKU10243 Theory of Food â€” Dashboard P&amp;P</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #f0f2f5;
+    color: #1f2328;
+  }
+
+  /* â”€â”€ Header â”€â”€ */
+  .header {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 18px 24px 14px;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .header-title { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #93b8e0; margin-bottom: 2px; }
+  .header h1 { font-size: 20px; font-weight: 700; line-height: 1.2; }
+  .header-sub { font-size: 12px; color: #b3cde8; margin-top: 3px; }
+  .header-badge {
+    background: #2e5c9e;
+    border: 1px solid #4a7fc1;
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-align: center;
+    min-width: 130px;
+  }
+  .header-badge .sem { font-size: 10px; color: #93b8e0; text-transform: uppercase; letter-spacing: .06em; }
+  .header-badge .prog { font-size: 12px; font-weight: 600; color: #e8f0fb; }
+
+  /* â”€â”€ Navbar (toolbar) â”€â”€ */
+  .navbar {
+    background: #152d4d;
+    border-bottom: 1px solid #1e3a5f;
+    padding: 8px 24px;
+  }
+  .navbar-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 13px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    border: 1px solid transparent; cursor: pointer; transition: opacity .15s;
+    background: #2e5c9e; color: #e8f0fb; border-color: #4a7fc1;
+  }
+  .nav-btn:hover { opacity: .85; }
+  .nav-btn.green { background: #166534; border-color: #22c55e; color: #dcfce7; }
+  .nav-btn.amber { background: #92400e; border-color: #f59e0b; color: #fef3c7; }
+  .nav-btn.red   { background: #7f1d1d; border-color: #ef4444; color: #fee2e2; }
+  .nav-spacer { flex: 1; }
+
+  /* â”€â”€ View Toggle â”€â”€ */
+  .view-toggle-wrap {
+    background: #1e3a5f;
+    padding: 0 24px 10px;
+  }
+  .view-toggle-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    border: 1px solid #4a7fc1;
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+  }
+  .view-tab {
+    padding: 7px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #93b8e0;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: background .15s, color .15s;
+  }
+  .view-tab.active {
+    background: #3b82d4;
+    color: #fff;
+  }
+  .view-tab:hover:not(.active) { background: #2e5c9e; color: #e8f0fb; }
+
+  /* â”€â”€ Layout â”€â”€ */
+  .container { max-width: 960px; margin: 0 auto; padding: 20px 16px 80px; }
+  .section { margin-bottom: 28px; }
+  .section-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: #57606a; margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: ''; display: inline-block; width: 4px; height: 16px;
+    border-radius: 2px; background: var(--accent, #3b82d4);
+  }
+
+  /* â”€â”€ KPI Cards â”€â”€ */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .kpi-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px 14px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--bar, #3b82d4);
+  }
+  .kpi-label { font-size: 11px; color: #57606a; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  .kpi-value { font-size: 28px; font-weight: 700; line-height: 1.1; margin: 6px 0 2px; color: var(--val, #1f2328); }
+  .kpi-sub { font-size: 11px; color: #57606a; }
+  .kpi-badge {
+    display: inline-block; margin-top: 8px;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    background: var(--badge-bg, #dbeafe); color: var(--badge-fg, #1d4ed8);
+  }
+
+  /* â”€â”€ Progress bar â”€â”€ */
+  .prog-bar-wrap { margin-top: 10px; }
+  .prog-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #57606a; margin-bottom: 4px; }
+  .prog-bar-track { background: #e5e7eb; border-radius: 4px; height: 8px; overflow: hidden; }
+  .prog-bar-fill { height: 100%; border-radius: 4px; background: var(--fill, #3b82d4); }
+
+  /* CLO Cards */
+  .clo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .clo-card {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 14px 12px;
+  }
+  .clo-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .clo-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; background: var(--icon-bg, #dbeafe);
+  }
+  .clo-title { font-size: 12px; font-weight: 700; color: #1f2328; }
+  .clo-desc { font-size: 11px; color: #57606a; }
+  .clo-pct { font-size: 22px; font-weight: 700; color: var(--pct-color, #1d4ed8); margin-bottom: 4px; }
+
+  /* â”€â”€ Assessment Table â”€â”€ */
+  .assess-table { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; border: 1px solid #e5e7eb; overflow: hidden; }
+  .assess-table thead th {
+    background: #f7f8fa; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; color: #57606a; padding: 10px 12px; text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .assess-table tbody tr { border-bottom: 1px solid #f0f2f5; }
+  .assess-table tbody tr:last-child { border-bottom: none; }
+  .assess-table tbody td { padding: 11px 12px; font-size: 13px; vertical-align: middle; }
+  .assess-name { font-weight: 600; }
+  .assess-weight { color: #57606a; font-size: 12px; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    background: var(--s-bg); color: var(--s-fg);
+  }
+  .mark-score { font-weight: 700; font-size: 13px; color: var(--score-c, #1f2328); }
+  .mark-total { font-size: 11px; color: #57606a; }
+  .action-btn {
+    display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    background: #f0f4ff; color: #3b82d4; border: 1px solid #c7d9f7; cursor: default; white-space: nowrap;
+  }
+  .action-btn.warn { background: #fff7ed; color: #c2610b; border-color: #fed7aa; }
+  .action-btn.target { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+  .score-bar-row { display: flex; align-items: center; gap: 6px; }
+  .score-mini-track { flex: 1; background: #e5e7eb; border-radius: 3px; height: 5px; overflow: hidden; min-width: 50px; }
+  .score-mini-fill { height: 100%; border-radius: 3px; background: var(--mf, #3b82d4); }
+
+  /* â”€â”€ WhatsApp Alert Button â”€â”€ */
+  .wa-alert-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: #f0fdf4; color: #166534; border: 1px solid #86efac;
+    cursor: pointer; white-space: nowrap; text-decoration: none;
+  }
+  .wa-alert-btn:hover { background: #dcfce7; }
+
+  /* â”€â”€ Module Cards â”€â”€ */
+  .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .module-card {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 14px 14px;
+    position: relative; overflow: hidden;
+  }
+  .module-card::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+    background: var(--mod-accent, #3b82d4);
+  }
+  .module-card { padding-left: 18px; }
+  .mod-icon { font-size: 24px; margin-bottom: 8px; }
+  .mod-title { font-size: 13px; font-weight: 700; color: #1f2328; margin-bottom: 2px; }
+  .mod-sub { font-size: 11px; color: #57606a; margin-bottom: 10px; }
+  .mod-resources { list-style: none; }
+  .mod-resources li {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: #3b82d4; padding: 3px 0;
+    border-bottom: 1px dashed #f0f2f5;
+  }
+  .mod-resources li:last-child { border-bottom: none; }
+  .res-icon { font-size: 13px; }
+
+  /* â”€â”€ Feedback Panel â”€â”€ */
+  .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .feedback-grid { grid-template-columns: 1fr; } }
+  .feedback-card {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px;
+  }
+  .fb-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .fb-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    background: var(--fb-icon-bg, #f7f8fa);
+  }
+  .fb-title { font-size: 13px; font-weight: 700; }
+  .fb-sub { font-size: 11px; color: #57606a; }
+  .fb-quote {
+    background: #f7f8fa; border-left: 3px solid #3b82d4;
+    border-radius: 0 6px 6px 0; padding: 10px 12px;
+    font-size: 12px; color: #1f2328; line-height: 1.6; font-style: italic;
+  }
+  .fb-quote .author { margin-top: 6px; font-style: normal; font-size: 11px; font-weight: 700; color: #57606a; }
+  .reminder-list { list-style: none; }
+  .reminder-list li {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 7px 0; border-bottom: 1px solid #f0f2f5; font-size: 12px;
+  }
+  .reminder-list li:last-child { border-bottom: none; }
+  .rem-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; background: var(--rd, #f59e0b); }
+  .rem-date { font-size: 10px; color: #57606a; }
+  .consult-btn {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid;
+    font-size: 13px; font-weight: 600; cursor: default; margin-top: 8px; text-decoration: none;
+  }
+  .consult-btn.wa { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+  .consult-btn.gm { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+  .consult-btn .btn-icon { font-size: 18px; }
+  .consult-btn .btn-text { flex: 1; }
+  .consult-btn .btn-arrow { color: #9ca3af; }
+
+  /* â”€â”€ Responsive table scroll â”€â”€ */
+  .table-wrap { overflow-x: auto; border-radius: 10px; }
+
+  /* â”€â”€ Executive View Panels â”€â”€ */
+  .exec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .exec-card {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px;
+  }
+  .exec-card-label { font-size: 11px; color: #57606a; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .exec-card-val { font-size: 26px; font-weight: 800; color: var(--ev, #1f2328); }
+  .exec-card-sub { font-size: 11px; color: #57606a; margin-top: 3px; }
+  .forecast-bar { margin-top: 10px; }
+  .roi-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .roi-table th, .roi-table td { font-size: 12px; padding: 6px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+  .roi-table th { background: #f7f8fa; font-weight: 700; color: #57606a; text-transform: uppercase; font-size: 10px; letter-spacing: .05em; }
+
+  /* â”€â”€ Operations Form â”€â”€ */
+  .ops-form { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .ops-form-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #1f2328; }
+  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 700; color: #57606a; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 7px 10px; border: 1px solid #d1d5db; border-radius: 6px;
+    font-size: 13px; font-family: inherit; color: #1f2328; background: #fff;
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  .form-save-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 700;
+    background: #1d4ed8; color: #fff; border: none; cursor: pointer;
+  }
+  .form-save-btn:hover { background: #1e40af; }
+
+  /* â”€â”€ View hidden states â”€â”€ */
+  .view-exec .ops-only { display: none !important; }
+  .view-ops  .exec-only { display: none !important; }
+
+  /* â”€â”€ QR Modal â”€â”€ */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(15,23,42,.6);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: 14px; padding: 28px 24px 20px;
+    max-width: 340px; width: 90%; text-align: center; position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 14px;
+    font-size: 20px; cursor: pointer; color: #57606a; background: none; border: none;
+  }
+  .modal-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .modal-sub { font-size: 12px; color: #57606a; margin-bottom: 16px; }
+  #qr-canvas { border: 1px solid #e5e7eb; border-radius: 8px; }
+  .modal-url {
+    margin-top: 10px; font-size: 11px; color: #57606a;
+    word-break: break-all; background: #f7f8fa; padding: 6px 10px;
+    border-radius: 6px; border: 1px solid #e5e7eb;
+  }
+
+  /* â”€â”€ Print PDF â”€â”€ */
+  .print-header { display: none; }
+  @media print {
+    .navbar, .view-toggle-wrap, .faq-btn, .faq-panel, .modal-overlay,
+    .nav-btn, .view-tab, .wa-alert-btn, .form-save-btn { display: none !important; }
+    .print-header { display: block; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #1e3a5f; padding-bottom: 12px; }
+    .print-header h2 { font-size: 18px; font-weight: 800; color: #1e3a5f; }
+    .print-header p { font-size: 12px; color: #57606a; }
+    .print-logo { font-size: 28px; margin-bottom: 4px; }
+    .signature-box { margin-top: 32px; border-top: 1px solid #e5e7eb; padding-top: 16px; }
+    .sig-row { display: flex; justify-content: space-between; gap: 24px; margin-top: 16px; }
+    .sig-cell { flex: 1; border-top: 1px solid #1f2328; padding-top: 6px; font-size: 11px; color: #57606a; }
+    body { background: #fff; font-size: 12px; }
+    .container { padding: 10px 16px; }
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* â”€â”€ FAQ Chatbot â”€â”€ */
+  .faq-btn {
+    position: fixed; bottom: 24px; right: 24px; z-index: 900;
+    width: 54px; height: 54px; border-radius: 50%; border: none;
+    background: #1d4ed8; color: #fff; font-size: 24px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(29,78,216,.4);
+  }
+  .faq-btn:hover { background: #1e40af; }
+  .faq-panel {
+    position: fixed; bottom: 88px; right: 24px; z-index: 900;
+    width: 340px; max-width: calc(100vw - 32px);
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
+    display: none; flex-direction: column;
+    box-shadow: 0 8px 32px rgba(15,23,42,.15);
+    overflow: hidden;
+  }
+  .faq-panel.open { display: flex; }
+  .faq-panel-head {
+    background: #1e3a5f; color: #fff;
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .faq-panel-title { font-size: 13px; font-weight: 700; }
+  .faq-close { background: none; border: none; color: #93b8e0; font-size: 18px; cursor: pointer; }
+  .faq-messages {
+    flex: 1; overflow-y: auto; padding: 12px 14px; max-height: 280px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .faq-msg {
+    max-width: 85%; padding: 8px 12px; border-radius: 10px;
+    font-size: 12px; line-height: 1.5;
+  }
+  .faq-msg.bot { background: #f7f8fa; color: #1f2328; align-self: flex-start; border-bottom-left-radius: 3px; }
+  .faq-msg.user { background: #1d4ed8; color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+  .faq-suggestions { padding: 8px 12px; border-top: 1px solid #f0f2f5; display: flex; flex-wrap: wrap; gap: 6px; }
+  .faq-chip {
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: pointer;
+  }
+  .faq-chip:hover { background: #dbeafe; }
+  .faq-input-row { padding: 8px 12px; border-top: 1px solid #e5e7eb; display: flex; gap: 6px; }
+  .faq-input {
+    flex: 1; padding: 7px 10px; border: 1px solid #d1d5db; border-radius: 6px;
+    font-size: 12px; font-family: inherit;
+  }
+  .faq-send {
+    padding: 7px 12px; background: #1d4ed8; color: #fff; border: none;
+    border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+  .faq-send:hover { background: #1e40af; }
+
+  /* â”€â”€ localStorage banner â”€â”€ */
+  .ls-banner {
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+    padding: 9px 14px; font-size: 12px; color: #166534;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .ls-reset-btn {
+    padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: #fff; color: #dc2626; border: 1px solid #fca5a5; cursor: pointer;
+    white-space: nowrap;
+  }
+  .ls-reset-btn:hover { background: #fee2e2; }
+
+  /* â”€â”€ Booking slot cards â”€â”€ */
+  .slot-card {
+    border: 2px solid #e5e7eb; border-radius: 10px; padding: 12px;
+    cursor: pointer; text-align: center; background: #fff;
+    transition: border-color .15s, background .15s;
+  }
+  .slot-card:hover { border-color: var(--sc, #3b82d4); background: #f7f8fa; }
+  .slot-card.slot-selected { border-color: var(--sc, #3b82d4); background: #f0fdf4; }
+  .time-slot-btn {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: 1px solid #d1d5db; background: #fff; cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .time-slot-btn:hover { background: #eff6ff; border-color: #3b82d4; }
+  .time-slot-btn.selected { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+  /* Booking list item */
+  .bk-item {
+    border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px;
+    margin-bottom: 10px; background: #fff; position: relative;
+  }
+  .bk-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .bk-item-type { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; }
+  .bk-item-type.wa { background: #dcfce7; color: #166534; }
+  .bk-item-type.gm { background: #dbeafe; color: #1d4ed8; }
+  .bk-item-date { font-size: 11px; color: #57606a; }
+  .bk-item-name { font-size: 13px; font-weight: 700; color: #1f2328; }
+  .bk-item-detail { font-size: 11px; color: #57606a; margin-top: 2px; }
+  .bk-item-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .bk-edit-btn {
+    padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: pointer;
+  }
+  .bk-del-btn {
+    padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: #fff; color: #dc2626; border: 1px solid #fca5a5; cursor: pointer;
+  }
+  .bk-resend-btn {
+    padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: #f0fdf4; color: #166534; border: 1px solid #86efac; cursor: pointer;
+  }
+
+  /* â”€â”€ Footer â”€â”€ */
+  .footer {
+    text-align: center; font-size: 11px; color: #9ca3af;
+    border-top: 1px solid #e5e7eb; padding-top: 14px; margin-top: 10px;
+  }
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SMART AI TAB STYLES
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  /* AI tab content panel */
+  #ai-tab-panel { display: none; }
+  #ai-tab-panel.active { display: block; }
+  #main-container.show-ai .dashboard-content { display: none; }
+  #main-container.show-ai #ai-tab-panel { display: block; }
+  /* Analisis tab */
+  #analisis-tab-panel { display: none; }
+  #analisis-tab-panel.active { display: block; }
+  #main-container.show-analisis .dashboard-content { display: none; }
+  #main-container.show-analisis #analisis-tab-panel { display: block; }
+  /* Analisis styles */
+  .an-kpi-row { display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px }
+  .an-kpi { background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:13px 12px;position:relative;overflow:hidden }
+  .an-kpi::before { content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--ab,#3b82d4) }
+  .an-kpi-label { font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#57606a }
+  .an-kpi-val { font-size:24px;font-weight:800;color:var(--av,#1f2328);line-height:1.1;margin:4px 0 2px }
+  .an-kpi-sub { font-size:10px;color:#57606a }
+  .an-tbl-wrap { overflow-x:auto;border-radius:10px;border:1px solid #e5e7eb;margin-bottom:16px }
+  .an-tbl { width:100%;border-collapse:separate;border-spacing:0;background:#fff }
+  .an-tbl thead th { background:#1e3a5f;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:9px 8px;text-align:center;white-space:nowrap;border-right:1px solid #2e5c9e }
+  .an-tbl thead th:last-child { border-right:none }
+  .an-tbl thead tr.an-sub th { background:#2e5c9e;font-size:10px;font-weight:600 }
+  .an-tbl tbody tr { border-bottom:1px solid #f0f2f5 }
+  .an-tbl tbody tr:last-child { border-bottom:none }
+  .an-tbl tbody tr:hover { background:#f7f8fa }
+  .an-tbl tbody td { padding:7px 7px;font-size:11px;text-align:center;vertical-align:middle;border-right:1px solid #f0f2f5 }
+  .an-tbl tfoot td { background:#f7f8fa;font-size:10px;font-weight:700;color:#57606a;padding:8px 7px;text-align:center;border-top:2px solid #e5e7eb }
+  .an-risk-high { background:#fef2f2!important }
+  .an-risk-med  { background:#fffbeb!important }
+  .an-risk-low  { background:#f0fdf4!important }
+  .an-pill { display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700 }
+  .an-pill-red    { background:#fee2e2;color:#991b1b }
+  .an-pill-amber  { background:#fef3c7;color:#92400e }
+  .an-pill-green  { background:#dcfce7;color:#166534 }
+  .an-filter-bar { display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;align-items:center }
+  .an-filter-btn { padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid #d1d5db;background:#fff;color:#57606a;cursor:pointer }
+  .an-filter-btn.active { background:#1d4ed8;color:#fff;border-color:#1d4ed8 }
+  .an-risk-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:11px;margin-bottom:14px }
+  .an-risk-card { background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden }
+  .an-rc-head { padding:11px 13px;display:flex;align-items:center;gap:9px }
+  .an-rc-head.high { background:#fef2f2;border-bottom:1px solid #fecaca }
+  .an-rc-head.med  { background:#fffbeb;border-bottom:1px solid #fde68a }
+  .an-rc-avatar { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0 }
+  .an-rc-avatar.high { background:#dc2626 }
+  .an-rc-avatar.med  { background:#f59e0b }
+  .an-rc-name { font-size:12px;font-weight:700;color:#1f2328 }
+  .an-rc-no   { font-size:10px;color:#57606a }
+  .an-rc-body { padding:11px 13px;font-size:11px }
+  .an-bar-row { display:flex;align-items:center;gap:7px;margin-top:5px }
+  .an-bar-label { font-size:10px;color:#57606a;width:90px;flex-shrink:0 }
+  .an-bar-track { flex:1;background:#e5e7eb;border-radius:3px;height:5px;overflow:hidden }
+  .an-bar-fill  { height:100%;border-radius:3px;background:var(--bf,#3b82d4) }
+  .an-fb-card { background:#fff;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;overflow:hidden }
+  .an-fb-head { background:#f7f8fa;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e5e7eb }
+  .an-fb-title { font-size:12px;font-weight:700;color:#1f2328 }
+  .an-fb-body { padding:11px 13px;font-size:11px;line-height:1.75;white-space:pre-line;color:#374151;background:#fdfdfd }
+  .an-fb-tip { margin:0 13px 10px;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;padding:8px 11px;font-size:11px;color:#92400e }
+  .an-fb-actions { padding:9px 13px;border-top:1px solid #f0f2f5;display:flex;gap:7px;flex-wrap:wrap }
+  .an-wa-btn { display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;background:#dcfce7;color:#166534;border:1px solid #86efac;text-decoration:none }
+  .an-clo-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:11px }
+
+  /* AI section cards */
+  .ai-section-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-radius: 10px 10px 0 0;
+    font-size: 13px; font-weight: 700; color: #fff;
+    cursor: pointer; user-select: none;
+  }
+  .ai-section-head .ai-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px;
+    background: rgba(255,255,255,.2); font-weight: 600; letter-spacing: .05em;
+  }
+  .ai-block {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+    margin-bottom: 16px; overflow: hidden;
+  }
+  .ai-block-body { padding: 16px; }
+
+  /* AI Function â€” blue */
+  .ai-fn .ai-section-head { background: #1d4ed8; }
+  /* AI Generator â€” purple */
+  .ai-gen .ai-section-head { background: #7c3aed; }
+  /* AI Simulator â€” teal */
+  .ai-sim .ai-section-head { background: #0891b2; }
+
+  /* AI card grid */
+  .ai-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+  .ai-card {
+    border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px;
+    background: #f7f8fa; position: relative; overflow: hidden;
+  }
+  .ai-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--ai-bar, #3b82d4);
+  }
+  .ai-card-icon { font-size: 22px; margin-bottom: 6px; }
+  .ai-card-title { font-size: 12px; font-weight: 700; color: #1f2328; margin-bottom: 3px; }
+  .ai-card-desc { font-size: 11px; color: #57606a; margin-bottom: 10px; line-height: 1.5; }
+  .ai-run-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    border: none; cursor: pointer; transition: opacity .15s;
+  }
+  .ai-run-btn:hover { opacity: .85; }
+  .ai-run-btn.blue  { background: #1d4ed8; color: #fff; }
+  .ai-run-btn.purple{ background: #7c3aed; color: #fff; }
+  .ai-run-btn.teal  { background: #0891b2; color: #fff; }
+
+  /* AI output box */
+  .ai-output {
+    margin-top: 10px; background: #fff; border: 1px solid #d1d5db;
+    border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.7;
+    color: #1f2328; min-height: 48px; display: none;
+    white-space: pre-wrap;
+  }
+  .ai-output.show { display: block; }
+  .ai-thinking {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: #7c3aed; font-style: italic; margin-top: 6px;
+  }
+  .ai-spinner {
+    width: 14px; height: 14px; border: 2px solid #e9d5ff;
+    border-top-color: #7c3aed; border-radius: 50%;
+    animation: spin .6s linear infinite; display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Simulator specific */
+  .quiz-q { font-size: 13px; font-weight: 700; color: #1f2328; margin-bottom: 10px; line-height: 1.5; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .quiz-opt {
+    padding: 8px 12px; border-radius: 7px; border: 1px solid #d1d5db;
+    font-size: 12px; cursor: pointer; background: #fff; text-align: left;
+    transition: background .15s, border-color .15s;
+  }
+  .quiz-opt:hover { background: #eff6ff; border-color: #bfdbfe; }
+  .quiz-opt.correct { background: #dcfce7; border-color: #22c55e; color: #166534; font-weight: 700; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+  .quiz-result { font-size: 12px; margin-top: 8px; font-weight: 700; padding: 8px 12px; border-radius: 7px; display: none; }
+  .quiz-score-bar { height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 10px; overflow: hidden; }
+  .quiz-score-fill { height: 100%; background: #22c55e; border-radius: 3px; transition: width .5s ease; }
+
+  /* Grade sim sliders */
+  .sim-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .sim-slider-row label { font-size: 12px; font-weight: 600; color: #57606a; min-width: 140px; }
+  .sim-slider-row input[type=range] { flex: 1; }
+  .sim-slider-row .sim-val { font-size: 12px; font-weight: 700; min-width: 36px; text-align: right; }
+  .sim-grade-display {
+    margin-top: 12px; padding: 14px; border-radius: 8px; text-align: center;
+    background: #f7f8fa; border: 1px solid #e5e7eb;
+  }
+  .sim-grade-big { font-size: 36px; font-weight: 800; }
+  .sim-grade-label { font-size: 12px; color: #57606a; margin-top: 4px; }
+
+  /* Schedule generator */
+  .sched-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+  .sched-table th { background: #1d4ed8; color: #fff; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  .sched-table td { padding: 7px 10px; border-bottom: 1px solid #f0f2f5; }
+  .sched-table tr:last-child td { border-bottom: none; }
+  .sched-table tr:nth-child(even) td { background: #f7f8fa; }
+
+  /* Cooking method simulator */
+  .method-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .method-chip {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: 1px solid #d1d5db; background: #fff; cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .method-chip.active { background: #0891b2; color: #fff; border-color: #0891b2; }
+  .method-chip:hover:not(.active) { background: #e0f7fa; border-color: #0891b2; }
+  .method-detail { background: #f0fdff; border: 1px solid #a5f3fc; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #164e63; line-height: 1.7; display: none; }
+  .method-detail.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     PRINT HEADER (only visible when printing)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="print-header">
+  <div class="print-logo">ðŸ³</div>
+  <h2>SKU10243 â€” Theory of Food</h2>
+  <p>Laporan Rasmi Pengajaran &amp; Pembelajaran | Sem 1, Sesi 2025/2026 | Sijil Kulinari</p>
+  <p style="margin-top:4px;font-size:11px;">Dijana: <span id="print-date"></span></p>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     HEADER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-title">Dashboard Pengajaran &amp; Pembelajaran</div>
+      <h1>SKU10243 â€” Theory of Food</h1>
+      <div class="header-sub">Sem 1  |  Program Sijil Kulinari  |  Sesi 2025/2026</div>
+    </div>
+    <div class="header-badge">
+      <div class="sem">Semester</div>
+      <div class="prog" style="font-size:22px;font-weight:800;color:#fff">1</div>
+      <div class="sem">Sijil Kulinari</div>
+    </div>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     NAVBAR TOOLBAR
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <button class="nav-btn green" onclick="exportPDF()">ðŸ–¨ï¸ Export Official PDF</button>
+    <button class="nav-btn" onclick="openQR()">ðŸ“± Share QR</button>
+    <span class="nav-spacer"></span>
+    <span style="font-size:11px;color:#93b8e0">ðŸ’¾ Data tersimpan dalam peranti</span>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     VIEW SWITCHER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="view-toggle-wrap">
+  <div class="view-toggle-inner">
+    <button class="view-tab active" id="tab-exec" onclick="switchView('exec')">ðŸ“Š Executive / Pengarah View</button>
+    <button class="view-tab" id="tab-ops"  onclick="switchView('ops')">âš™ï¸ Operations View</button>
+    <button class="view-tab" id="tab-ai"   onclick="switchView('ai')" style="background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-weight:800;">ðŸ¤– Smart AI</button>
+    <button class="view-tab" id="tab-analisis" onclick="switchView('analisis')" style="background:linear-gradient(135deg,#dc2626,#f59e0b);color:#fff;font-weight:800;">ðŸ“‹ Analisis Markah</button>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     MAIN CONTENT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="container" id="main-container">
+
+<div class="dashboard-content">
+  <!-- LocalStorage banner -->
+  <div class="ls-banner" id="ls-banner">
+    <span>âœ… Data dashboard disimpan secara automatik dalam peranti anda.</span>
+    <button class="ls-reset-btn" onclick="resetData()">ðŸ”„ Reset Demo Data</button>
+  </div>
+
+  <!-- â•â•â•â•â•â•â•â• SECTION 1 â€” PENCAPAIAN â•â•â•â•â•â•â•â• -->
+  <div class="section">
+    <div class="section-label" style="--accent:#e05252">ðŸ”´ Bahagian 1 â€” Ringkasan Pencapaian Pelajar</div>
+
+    <div class="kpi-grid" style="margin-bottom:14px">
+
+      <div class="kpi-card" style="--bar:#3b82d4">
+        <div class="kpi-label">Markah PB Terkumpul</div>
+        <div class="kpi-value" style="--val:#1d4ed8" id="kpi-markah">47.45</div>
+        <div class="kpi-sub">daripada 75.00 markah (63.3%)</div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="--fill:#3b82d4;width:63.3%"></div></div>
+        </div>
+        <div class="kpi-badge" style="--badge-bg:#dbeafe;--badge-fg:#1d4ed8">Penilaian Berterusan</div>
+      </div>
+
+      <div class="kpi-card" style="--bar:#22c55e">
+        <div class="kpi-label">Status Prestasi Semasa</div>
+        <div class="kpi-value" style="--val:#166534;font-size:22px;margin-top:10px">âœ… Sederhana Baik</div>
+        <div class="kpi-sub" style="margin-top:6px">Tingkatkan ulang kaji untuk Peperiksaan Akhir</div>
+        <div class="kpi-badge" style="--badge-bg:#dcfce7;--badge-fg:#166534;margin-top:10px">ðŸŸ¢ Status: OK</div>
+      </div>
+
+      <div class="kpi-card" style="--bar:#f59e0b">
+        <div class="kpi-label">Peperiksaan Akhir</div>
+        <div class="kpi-value" style="--val:#92400e;font-size:22px;margin-top:8px">â€” / 25</div>
+        <div class="kpi-sub">ðŸ“… 25 Nov 2026  |  Pemberat: 25%</div>
+        <div class="kpi-badge" style="--badge-bg:#fef3c7;--badge-fg:#92400e;margin-top:10px">â³ Akan Datang</div>
+      </div>
+
+    </div>
+
+    <div class="clo-grid">
+
+      <div class="clo-card">
+        <div class="clo-head">
+          <div class="clo-icon" style="--icon-bg:#dbeafe">ðŸ“š</div>
+          <div>
+            <div class="clo-title">CLO 1 â€” Teori &amp; Pengetahuan</div>
+            <div class="clo-desc">Kuiz &amp; Ujian Teori</div>
+          </div>
+        </div>
+        <div class="clo-pct" style="--pct-color:#1d4ed8">65.0%</div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-label"><span>Penguasaan</span><span>6.75 + 3.00 = 9.75 / 15</span></div>
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="--fill:#3b82d4;width:65%"></div></div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#f59e0b;font-weight:600">âš ï¸ Ujian Teori â€” Perlu Peningkatan</div>
+        <!-- ALERT BUTTON -->
+        <div style="margin-top:8px">
+          <a class="wa-alert-btn" href="https://wa.me/?text=ðŸš¨%20ALERT%20SKU10243%3A%20CLO%201%20Teori%20%26%20Pengetahuan%20perlu%20perhatian.%20Markah%20semasa%3A%209.75%2F15%20(65%25).%20Sila%20buat%20bimbingan%20segera." target="_blank">
+            ðŸ’¬ WhatsApp Alert
+          </a>
+        </div>
+      </div>
+
+      <div class="clo-card">
+        <div class="clo-head">
+          <div class="clo-icon" style="--icon-bg:#dcfce7">ðŸ”ª</div>
+          <div>
+            <div class="clo-title">CLO 2 â€” Kemahiran Praktikal</div>
+            <div class="clo-desc">Tugasan &amp; Dapur Amali</div>
+          </div>
+        </div>
+        <div class="clo-pct" style="--pct-color:#166534">76.0%</div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-label"><span>Penguasaan</span><span>6.50 + 15.20 = 21.70 / 30</span></div>
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="--fill:#22c55e;width:76%"></div></div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#166534;font-weight:600">âœ… Prestasi Baik</div>
+      </div>
+
+      <div class="clo-card">
+        <div class="clo-head">
+          <div class="clo-icon" style="--icon-bg:#fef3c7">ðŸ¤</div>
+          <div>
+            <div class="clo-title">CLO 3 â€” Etika &amp; Sikap</div>
+            <div class="clo-desc">Kehadiran, Keselamatan &amp; Pembentangan</div>
+          </div>
+        </div>
+        <div class="clo-pct" style="--pct-color:#92400e">Dalam Pemantauan</div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-label"><span>Status Kehadiran</span><span>Aktif</span></div>
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="--fill:#f59e0b;width:80%"></div></div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#57606a">Pembentangan &amp; keselamatan dapur dinilai berterusan</div>
+        <!-- ALERT BUTTON -->
+        <div style="margin-top:8px">
+          <a class="wa-alert-btn" href="https://wa.me/?text=ðŸš¨%20ALERT%20SKU10243%3A%20CLO%203%20Etika%20%26%20Sikap%20sedang%20dipantau.%20Kehadiran%20dan%20keselamatan%20dapur%20perlu%20perhatian%20segera." target="_blank">
+            ðŸ’¬ WhatsApp Alert
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- â•â•â•â•â•â•â•â• EXEC-ONLY: AI Forecast & ROI â•â•â•â•â•â•â•â• -->
+  <div class="section exec-only">
+    <div class="section-label" style="--accent:#7c5cd8">ðŸŸ£ Executive View â€” AI Forecast &amp; ROI Summary</div>
+
+    <div class="exec-grid">
+      <div class="exec-card">
+        <div class="exec-card-label">AI Final Exam Forecast</div>
+        <div class="exec-card-val" style="--ev:#166534">B (66%)</div>
+        <div class="exec-card-sub">Berdasarkan trajektori semasa PB 63.3%</div>
+        <div class="forecast-bar">
+          <div class="prog-bar-label"><span>Keyakinan Model</span><span>74%</span></div>
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="--fill:#7c5cd8;width:74%"></div></div>
+        </div>
+      </div>
+      <div class="exec-card">
+        <div class="exec-card-label">Risiko Gagal (At-Risk)</div>
+        <div class="exec-card-val" style="--ev:#dc2626">12%</div>
+        <div class="exec-card-sub">Pelajar berisiko gagal berdasarkan CLO 1 rendah</div>
+        <div class="forecast-bar">
+          <div class="prog-bar-track" style="margin-top:8px"><div class="prog-bar-fill" style="--fill:#ef4444;width:12%"></div></div>
+        </div>
+      </div>
+      <div class="exec-card">
+        <div class="exec-card-label">Kebolehcapaian Gred A</div>
+        <div class="exec-card-val" style="--ev:#1d4ed8">31%</div>
+        <div class="exec-card-sub">Jika mendapat 22+/25 dalam Peperiksaan Akhir</div>
+        <div class="forecast-bar">
+          <div class="prog-bar-track" style="margin-top:8px"><div class="prog-bar-fill" style="--fill:#3b82d4;width:31%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+      <div style="padding:12px 16px;background:#f7f8fa;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:700;color:#1f2328">
+        ðŸ“ˆ ROI Pengajaran â€” Ringkasan Eksekutif
+      </div>
+      <div style="padding:0">
+        <table class="roi-table">
+          <thead><tr><th>Komponen</th><th>Pelaburan (Jam)</th><th>Pencapaian (%)</th><th>ROI Indeks</th></tr></thead>
+          <tbody>
+            <tr><td>Kuliah Teori (CLO1)</td><td>24 jam</td><td>65%</td><td style="color:#f59e0b;font-weight:700">âš ï¸ 0.65</td></tr>
+            <tr><td>Amali Dapur (CLO2)</td><td>36 jam</td><td>76%</td><td style="color:#166534;font-weight:700">âœ… 0.76</td></tr>
+            <tr><td>Pembentangan (CLO3)</td><td>12 jam</td><td>80%</td><td style="color:#166534;font-weight:700">âœ… 0.80</td></tr>
+            <tr style="background:#f7f8fa;font-weight:700"><td>Purata Keseluruhan</td><td>72 jam</td><td>73.7%</td><td style="color:#1d4ed8">ðŸ“Š 0.74</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;background:#fdf4ff;border:1px solid #e9d5ff;border-radius:8px;padding:10px 14px;font-size:12px;color:#6b21a8">
+      <strong>ðŸ¤– AI Cadangan:</strong> Tingkatkan sesi ulang kaji CLO 1 sebanyak 2 sesi tambahan sebelum peperiksaan. Fokus kepada terminologi kaedah memasak dan food science asas.
+    </div>
+  </div>
+
+
+  <!-- â•â•â•â•â•â•â•â• SECTION 2 â€” KEMAJUAN PENILAIAN â•â•â•â•â•â•â•â• -->
+  <div class="section">
+    <div class="section-label" style="--accent:#3b82d4">ðŸ”µ Bahagian 2 â€” Kemajuan Penilaian &amp; Tugasan</div>
+
+    <div class="table-wrap">
+      <table class="assess-table">
+        <thead>
+          <tr>
+            <th>Pentaksiran</th>
+            <th>Pemberat</th>
+            <th>Status</th>
+            <th>Markah Pelajar</th>
+            <th>Skor</th>
+            <th>Tindakan</th>
+            <th>Alert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="assess-name">ðŸ“ Kuiz 1</span></td>
+            <td><span class="assess-weight">7.5%</span></td>
+            <td><span class="status-pill" style="--s-bg:#dcfce7;--s-fg:#166534">âœ… Selesai</span></td>
+            <td><span class="mark-score" style="--score-c:#166534">6.75</span><span class="mark-total"> / 7.50</span></td>
+            <td><div class="score-bar-row"><div class="score-mini-track"><div class="score-mini-fill" style="--mf:#22c55e;width:90%"></div></div><span style="font-size:11px;color:#57606a">90%</span></div></td>
+            <td><span class="action-btn">ðŸ“– Ulang kaji Topik 1</span></td>
+            <td>â€”</td>
+          </tr>
+          <tr>
+            <td><span class="assess-name">ðŸ“‹ Ujian Teori 1</span></td>
+            <td><span class="assess-weight">7.5%</span></td>
+            <td><span class="status-pill" style="--s-bg:#fee2e2;--s-fg:#991b1b">âš ï¸ Rendah</span></td>
+            <td><span class="mark-score" style="--score-c:#c2610b">3.00</span><span class="mark-total"> / 7.50</span></td>
+            <td><div class="score-bar-row"><div class="score-mini-track"><div class="score-mini-fill" style="--mf:#f97316;width:40%"></div></div><span style="font-size:11px;color:#c2610b">40%</span></div></td>
+            <td><span class="action-btn warn">âš ï¸ Minta Bimbingan</span></td>
+            <td><a class="wa-alert-btn" href="https://wa.me/?text=ðŸš¨%20URGENT%20SKU10243%3A%20Ujian%20Teori%201%20â€”%20Markah%20hanya%203.00%2F7.50%20(40%25).%20Pelajar%20memerlukan%20bimbingan%20segera!%20Sila%20semak%20dan%20ambil%20tindakan." target="_blank">ðŸ’¬ Alert</a></td>
+          </tr>
+          <tr>
+            <td><span class="assess-name">ðŸŽ¤ Pembentangan 1</span></td>
+            <td><span class="assess-weight">10.0%</span></td>
+            <td><span class="status-pill" style="--s-bg:#dcfce7;--s-fg:#166534">âœ… Selesai</span></td>
+            <td><span class="mark-score" style="--score-c:#1d4ed8">6.50</span><span class="mark-total"> / 10.00</span></td>
+            <td><div class="score-bar-row"><div class="score-mini-track"><div class="score-mini-fill" style="--mf:#3b82d4;width:65%"></div></div><span style="font-size:11px;color:#57606a">65%</span></div></td>
+            <td><span class="action-btn">ðŸ’¬ Lihat Ulasan</span></td>
+            <td>â€”</td>
+          </tr>
+          <tr>
+            <td><span class="assess-name">ðŸ‘¥ Tugasan Kumpulan</span></td>
+            <td><span class="assess-weight">20.0%</span></td>
+            <td><span class="status-pill" style="--s-bg:#dcfce7;--s-fg:#166534">âœ… Selesai</span></td>
+            <td><span class="mark-score" style="--score-c:#166534">15.20</span><span class="mark-total"> / 20.00</span></td>
+            <td><div class="score-bar-row"><div class="score-mini-track"><div class="score-mini-fill" style="--mf:#22c55e;width:76%"></div></div><span style="font-size:11px;color:#57606a">76%</span></div></td>
+            <td><span class="action-btn">ðŸ“¥ Muat turun Maklum Balas</span></td>
+            <td>â€”</td>
+          </tr>
+          <tr style="background:#fafbff">
+            <td><span class="assess-name">ðŸŽ“ Peperiksaan Akhir</span></td>
+            <td><span class="assess-weight">25.0%</span></td>
+            <td><span class="status-pill" style="--s-bg:#fef3c7;--s-fg:#92400e">ðŸ“… 25 Nov 2026</span></td>
+            <td><span class="mark-score" style="--score-c:#9ca3af">â€”</span><span class="mark-total"> / 25.00</span></td>
+            <td><div class="score-bar-row"><div class="score-mini-track"><div class="score-mini-fill" style="--mf:#d1d5db;width:0%"></div></div><span style="font-size:11px;color:#9ca3af">â€”</span></div></td>
+            <td><span class="action-btn target">ðŸŽ¯ Set Target Markah</span></td>
+            <td>â€”</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:12px;color:#166534">
+      <strong>ðŸŽ¯ Anggaran:</strong> Untuk lulus dengan gred C (50%), pelajar perlu mendapat sekurang-kurangnya <strong>2.55 / 25</strong> dalam Peperiksaan Akhir. Untuk gred B (65%), sasarkan <strong>17.55 / 25</strong>.
+    </div>
+  </div>
+
+
+  <!-- â•â•â•â•â•â•â•â• OPS-ONLY: Operations Form â•â•â•â•â•â•â•â• -->
+  <div class="section ops-only">
+    <div class="section-label" style="--accent:#22c55e">âš™ï¸ Operations View â€” Borang Kemas Kini Data</div>
+
+    <div class="ops-form">
+      <div class="ops-form-title">ðŸ“ Kemas Kini Markah Pelajar</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nama Pelajar</label>
+          <input type="text" id="f-nama" placeholder="cth: Ahmad bin Ali" />
+        </div>
+        <div class="form-group">
+          <label>No. Matrik</label>
+          <input type="text" id="f-matrik" placeholder="cth: SKU2025001" />
+        </div>
+        <div class="form-group">
+          <label>Pentaksiran</label>
+          <select id="f-pent">
+            <option>Kuiz 1</option>
+            <option>Ujian Teori 1</option>
+            <option>Pembentangan 1</option>
+            <option>Tugasan Kumpulan</option>
+            <option>Peperiksaan Akhir</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Markah Diperoleh</label>
+          <input type="number" id="f-markah" placeholder="0.00" step="0.01" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Catatan / Ulasan Pensyarah</label>
+          <textarea id="f-nota" placeholder="Masukkan catatan atau ulasan pensyarah untuk rekod..."></textarea>
+        </div>
+      </div>
+      <button class="form-save-btn" onclick="saveOpsData()">ðŸ’¾ Simpan &amp; Kemas Kini</button>
+      <span id="ops-save-msg" style="font-size:12px;color:#166534;margin-left:10px;display:none">âœ… Disimpan!</span>
+    </div>
+
+    <div class="ops-form">
+      <div class="ops-form-title">ðŸ“… Jadual Sesi Kelas &amp; Makmal</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tarikh Sesi</label>
+          <input type="date" id="f-tarikh" />
+        </div>
+        <div class="form-group">
+          <label>Masa</label>
+          <input type="time" id="f-masa" />
+        </div>
+        <div class="form-group">
+          <label>Jenis Sesi</label>
+          <select id="f-jenis">
+            <option>Kuliah Teori</option>
+            <option>Amali Dapur</option>
+            <option>Ulang Kaji</option>
+            <option>Klinik Bimbingan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Topik / Modul</label>
+          <input type="text" id="f-topik" placeholder="cth: Modul 3 â€” Kaedah Memasak" />
+        </div>
+      </div>
+      <button class="form-save-btn" onclick="saveSchedule()">ðŸ“… Simpan Jadual</button>
+      <span id="sched-save-msg" style="font-size:12px;color:#166534;margin-left:10px;display:none">âœ… Jadual Disimpan!</span>
+    </div>
+  </div>
+
+
+  <!-- â•â•â•â•â•â•â•â• SECTION 3 â€” MODULE HUB â•â•â•â•â•â•â•â• -->
+  <div class="section">
+    <div class="section-label" style="--accent:#22c55e">ðŸŸ¢ Bahagian 3 â€” Hab Modul &amp; Bahan Pembelajaran</div>
+
+    <div class="module-grid">
+      <div class="module-card" style="--mod-accent:#e05252">
+        <div class="mod-icon">ðŸ³</div>
+        <div class="mod-title">Modul 1</div>
+        <div class="mod-sub">Keselamatan &amp; Kebersihan Dapur<br /><span style="color:#9ca3af">Food Hygiene &amp; Safety</span></div>
+        <ul class="mod-resources">
+          <li><span class="res-icon">ðŸ“„</span> Slide Nota â€” Hygiene Asas</li>
+          <li><span class="res-icon">ðŸ“Š</span> Infografik HACCP</li>
+          <li><span class="res-icon">â–¶ï¸</span> Video: Teknik Cuci Tangan</li>
+          <li><span class="res-icon">ðŸ“‹</span> Senarai Semak Keselamatan</li>
+        </ul>
+      </div>
+      <div class="module-card" style="--mod-accent:#3b82d4">
+        <div class="mod-icon">ðŸ”ª</div>
+        <div class="mod-title">Modul 2</div>
+        <div class="mod-sub">Peralatan Dapur &amp; Teknik Potongan<br /><span style="color:#9ca3af">Knife Skills &amp; Equipment</span></div>
+        <ul class="mod-resources">
+          <li><span class="res-icon">ðŸƒ</span> Flashcard: Jenis-jenis Pisau</li>
+          <li><span class="res-icon">ðŸ“–</span> Panduan Potongan Sayur</li>
+          <li><span class="res-icon">â–¶ï¸</span> Video: Julienne &amp; Brunoise</li>
+          <li><span class="res-icon">ðŸ“‹</span> Carta Peralatan Dapur</li>
+        </ul>
+      </div>
+      <div class="module-card" style="--mod-accent:#f59e0b">
+        <div class="mod-icon">ðŸ²</div>
+        <div class="mod-title">Modul 3</div>
+        <div class="mod-sub">Kaedah Memasak<br /><span style="color:#9ca3af">Moist &amp; Dry Heat Methods</span></div>
+        <ul class="mod-resources">
+          <li><span class="res-icon">â–¶ï¸</span> Video: Poaching &amp; Simmering</li>
+          <li><span class="res-icon">â–¶ï¸</span> Video: SautÃ©ing &amp; Roasting</li>
+          <li><span class="res-icon">ðŸ“Š</span> Carta Perbezaan Kaedah</li>
+          <li><span class="res-icon">ðŸ“</span> Latihan Soalan CLO1</li>
+        </ul>
+      </div>
+      <div class="module-card" style="--mod-accent:#7c5cd8">
+        <div class="mod-icon">ðŸ“‘</div>
+        <div class="mod-title">Modul 4</div>
+        <div class="mod-sub">Stok, Sup &amp; Sos Asas<br /><span style="color:#9ca3af">Mother Sauces &amp; Stocks</span></div>
+        <ul class="mod-resources">
+          <li><span class="res-icon">ðŸ“Š</span> Carta: 5 Sos Ibu (Mother Sauces)</li>
+          <li><span class="res-icon">ðŸ“‹</span> Resepi: BÃ©chamel &amp; VeloutÃ©</li>
+          <li><span class="res-icon">ðŸ“‹</span> Resepi: Espagnole &amp; Hollandaise</li>
+          <li><span class="res-icon">â–¶ï¸</span> Video Demo: Sos Tomato Asas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px">
+      <div style="font-size:12px;font-weight:700;color:#1f2328;margin-bottom:10px">ðŸ§‘â€ðŸ³ Rujukan Pantas â€” 5 Sos Ibu (Mother Sauces)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px">
+        <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:8px;padding:8px 10px;text-align:center"><div style="font-size:12px;font-weight:700;color:#6b21a8">BÃ©chamel</div><div style="font-size:10px;color:#7c3aed;margin-top:2px">Susu + Roux Putih</div></div>
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:8px 10px;text-align:center"><div style="font-size:12px;font-weight:700;color:#9a3412">VeloutÃ©</div><div style="font-size:10px;color:#c2410c;margin-top:2px">Stok Putih + Roux</div></div>
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 10px;text-align:center"><div style="font-size:12px;font-weight:700;color:#991b1b">Espagnole</div><div style="font-size:10px;color:#b91c1c;margin-top:2px">Stok Coklat + Mirepoix</div></div>
+        <div style="background:#fefce8;border:1px solid #fef08a;border-radius:8px;padding:8px 10px;text-align:center"><div style="font-size:12px;font-weight:700;color:#854d0e">Hollandaise</div><div style="font-size:10px;color:#a16207;margin-top:2px">Kuning Telur + Mentega</div></div>
+        <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:8px 10px;text-align:center"><div style="font-size:12px;font-weight:700;color:#dc2626">Tomato</div><div style="font-size:10px;color:#ef4444;margin-top:2px">Tomato + Stok + Mirepoix</div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- â•â•â•â•â•â•â•â• SECTION 4 â€” MAKLUM BALAS â•â•â•â•â•â•â•â• -->
+  <div class="section">
+    <div class="section-label" style="--accent:#f59e0b">ðŸŸ¡ Bahagian 4 â€” Maklum Balas &amp; Bimbingan Pensyarah</div>
+
+    <div class="feedback-grid">
+      <div class="feedback-card">
+        <div class="fb-head">
+          <div class="fb-icon" style="--fb-icon-bg:#eff6ff">ðŸ’¬</div>
+          <div>
+            <div class="fb-title">Ulasan Pensyarah</div>
+            <div class="fb-sub">Maklum Balas Terkini</div>
+          </div>
+        </div>
+        <div class="fb-quote">
+          "Bagus dalam Tugasan Kumpulan! Kerjasama pasukan amat memuaskan. Walau bagaimanapun, keputusan Ujian Teori 1 perlu ditingkatkan â€” fokus pada asas kaedah memasak dan terminologi dapur. Tingkatkan ulang kaji sebelum Peperiksaan Akhir!"
+          <div class="author">â€” Pensyarah SKU10243, November 2025</div>
+        </div>
+        <div style="margin-top:12px;background:#fff7ed;border-radius:8px;padding:10px 12px;font-size:12px;border:1px solid #fed7aa">
+          <strong style="color:#92400e">ðŸ’¡ Tip Pensyarah:</strong> <span style="color:#78350f">Hafal 5 Mother Sauces dan kaedah asas Moist &amp; Dry Heat â€” soalan ini selalu keluar dalam peperiksaan!</span>
+        </div>
+      </div>
+
+      <div class="feedback-card">
+        <div class="fb-head">
+          <div class="fb-icon" style="--fb-icon-bg:#fef3c7">ðŸ””</div>
+          <div>
+            <div class="fb-title">Peringatan &amp; Tarikh Penting</div>
+            <div class="fb-sub">Kalendar Akademik</div>
+          </div>
+        </div>
+        <ul class="reminder-list">
+          <li><div class="rem-dot" style="--rd:#22c55e"></div><div><div>âœ… Tugasan Kumpulan â€” Dihantar</div><div class="rem-date">Oktober 2025 â€” Selesai</div></div></li>
+          <li><div class="rem-dot" style="--rd:#3b82d4"></div><div><div>ðŸ“ Sesi Ulang Kaji Bersama</div><div class="rem-date">15 November 2025 â€” 10:00 pagi</div></div></li>
+          <li><div class="rem-dot" style="--rd:#f59e0b"></div><div><div>ðŸ“š Minggu Ulang Kaji Peperiksaan</div><div class="rem-date">18â€“22 November 2025</div></div></li>
+          <li><div class="rem-dot" style="--rd:#e05252"></div><div><div>ðŸŽ“ <strong>Peperiksaan Akhir SKU10243</strong></div><div class="rem-date">25 November 2026 â€” Dewan Peperiksaan</div></div></li>
+        </ul>
+      </div>
+
+      <div class="feedback-card" style="grid-column:1 / -1">
+        <div class="fb-head">
+          <div class="fb-icon" style="--fb-icon-bg:#f0fdf4">ðŸ“…</div>
+          <div>
+            <div class="fb-title">Tempahan Bimbingan &amp; Klinik Pensyarah</div>
+            <div class="fb-sub">Isi borang â†’ pilih slot â†’ hantar terus via WhatsApp atau Google Meet</div>
+          </div>
+        </div>
+
+        <!-- â”€â”€ Booking Tabs â”€â”€ -->
+        <div style="display:flex;gap:0;border:1px solid #d1d5db;border-radius:8px;overflow:hidden;margin-bottom:14px">
+          <button id="btab-form" onclick="switchBookingTab('form')" style="flex:1;padding:8px;font-size:12px;font-weight:700;background:#1d4ed8;color:#fff;border:none;cursor:pointer">ðŸ“ Buat Tempahan Baru</button>
+          <button id="btab-list" onclick="switchBookingTab('list')" style="flex:1;padding:8px;font-size:12px;font-weight:700;background:#f7f8fa;color:#57606a;border:none;cursor:pointer;border-left:1px solid #d1d5db">ðŸ“‹ Tempahan Saya</button>
+        </div>
+
+        <!-- â”€â”€ FORM PANEL â”€â”€ -->
+        <div id="booking-form-panel">
+
+          <!-- Slot Grid -->
+          <div style="font-size:11px;font-weight:700;color:#57606a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">â‘  Pilih Jenis Sesi</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+            <div id="slot-wa" class="slot-card slot-selected" onclick="selectSlot('wa')" style="--sc:#22c55e">
+              <div style="font-size:18px;margin-bottom:4px">ðŸ’¬</div>
+              <div style="font-size:12px;font-weight:700;color:#166534">WhatsApp Pensyarah</div>
+              <div style="font-size:10px;color:#57606a;margin-top:2px">Isnin â€“ Khamis, 9am â€“ 4pm</div>
+              <div style="font-size:10px;color:#166534;margin-top:4px;font-weight:600">âœ… Tersedia</div>
+            </div>
+            <div id="slot-gm" class="slot-card" onclick="selectSlot('gm')" style="--sc:#1d4ed8">
+              <div style="font-size:18px;margin-bottom:4px">ðŸŽ¥</div>
+              <div style="font-size:12px;font-weight:700;color:#1d4ed8">Google Meet â€” Klinik Online</div>
+              <div style="font-size:10px;color:#57606a;margin-top:2px">Jumaat, 10am â€“ 12pm</div>
+              <div style="font-size:10px;color:#1d4ed8;margin-top:4px;font-weight:600">ðŸ”µ Tempah Slot</div>
+            </div>
+          </div>
+
+          <!-- Slot Time Picker (Google Meet only) -->
+          <div id="gm-slot-picker" style="display:none;margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;color:#57606a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">â‘¡ Pilih Slot Masa (Jumaat)</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px" id="time-slots">
+              <button class="time-slot-btn" onclick="selectTime(this,'10:00 AM')">10:00 AM</button>
+              <button class="time-slot-btn" onclick="selectTime(this,'10:30 AM')">10:30 AM</button>
+              <button class="time-slot-btn" onclick="selectTime(this,'11:00 AM')">11:00 AM</button>
+              <button class="time-slot-btn" onclick="selectTime(this,'11:30 AM')">11:30 AM</button>
+            </div>
+          </div>
+
+          <!-- Booking Form Fields -->
+          <div style="font-size:11px;font-weight:700;color:#57606a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px" id="form-step-label">â‘¡ Isi Maklumat Tempahan</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div>
+              <label style="font-size:11px;font-weight:700;color:#57606a;display:block;margin-bottom:4px;text-transform:uppercase">Nama Penuh Pelajar</label>
+              <input id="bk-nama" type="text" placeholder="cth: Ahmad bin Ali" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit" />
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:#57606a;display:block;margin-bottom:4px;text-transform:uppercase">No. Matrik</label>
+              <input id="bk-matrik" type="text" placeholder="cth: SKU2025001" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit" />
+            </div>
+          </div>
+          <div style="margin-bottom:10px">
+            <label style="font-size:11px;font-weight:700;color:#57606a;display:block;margin-bottom:4px;text-transform:uppercase">Topik Bimbingan / Masalah Yang Dihadapi</label>
+            <select id="bk-topik" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit">
+              <option value="">-- Pilih Topik --</option>
+              <option>Topik 1: Peralatan &amp; Perkakasan Dapur</option>
+              <option>Topik 2: Kaedah Masakan (Haba Kering/Lembap)</option>
+              <option>Topik 3: Stok, Sup &amp; Sos / Mother Sauces</option>
+              <option>Topik 4: Sayur-Sayuran &amp; Buah-Buahan</option>
+              <option>Topik 5: Red Meat &amp; Primal Cut</option>
+              <option>Topik 6: Poultry &amp; Game Birds</option>
+              <option>Topik 7: Fish &amp; Shellfish</option>
+              <option>Topik 8: Produk Tenusu &amp; Telur</option>
+              <option>Topik 9: Bahan Kering &amp; Penyimpanan</option>
+              <option>CLO 1: Teori &amp; Pengetahuan (Ujian Rendah)</option>
+              <option>CLO 2: Kemahiran Praktikal</option>
+              <option>CLO 3: Etika, Sikap &amp; Kehadiran</option>
+              <option>Persediaan Peperiksaan Akhir</option>
+              <option>Lain-lain (nyatakan dalam catatan)</option>
+            </select>
+          </div>
+          <div style="margin-bottom:10px">
+            <label style="font-size:11px;font-weight:700;color:#57606a;display:block;margin-bottom:4px;text-transform:uppercase">Tarikh Pilihan</label>
+            <input id="bk-tarikh" type="date" style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit" />
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="font-size:11px;font-weight:700;color:#57606a;display:block;margin-bottom:4px;text-transform:uppercase">Catatan Tambahan (Optional)</label>
+            <textarea id="bk-nota" placeholder="Nyatakan soalan atau perkara spesifik yang ingin dibincangkan..." style="width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:56px"></textarea>
+          </div>
+
+          <!-- Action Buttons -->
+          <div id="bk-error" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:7px;padding:8px 12px;font-size:12px;color:#991b1b;margin-bottom:10px"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="bk-submit-wa" class="consult-btn wa" style="cursor:pointer;border:none;flex:1;min-width:160px" onclick="submitBooking()">
+              <span class="btn-icon">ðŸ’¬</span>
+              <span class="btn-text"><strong>Hantar via WhatsApp</strong><br /><span style="font-size:11px;font-weight:400">Buka WhatsApp terus</span></span>
+              <span class="btn-arrow">â€º</span>
+            </button>
+            <button id="bk-submit-gm" class="consult-btn gm" style="cursor:pointer;border:none;flex:1;min-width:160px" onclick="submitBooking()">
+              <span class="btn-icon">ðŸŽ¥</span>
+              <span class="btn-text"><strong>Tempah Google Meet</strong><br /><span style="font-size:11px;font-weight:400">Simpan &amp; hantar via WA</span></span>
+              <span class="btn-arrow">â€º</span>
+            </button>
+          </div>
+          <div style="margin-top:10px;background:#f7f8fa;border-radius:8px;padding:9px 12px;font-size:11px;color:#57606a">
+            ðŸ“Œ <strong>Arahan:</strong> Lengkapkan borang â†’ klik butang hantar â†’ WhatsApp akan dibuka dengan mesej yang sudah diisi secara automatik.
+          </div>
+        </div><!-- /#booking-form-panel -->
+
+        <!-- â”€â”€ LIST PANEL â”€â”€ -->
+        <div id="booking-list-panel" style="display:none">
+          <div id="bk-list-empty" style="text-align:center;padding:24px;color:#9ca3af;font-size:13px">
+            ðŸ“­ Tiada tempahan disimpan lagi.<br><span style="font-size:11px">Buat tempahan baharu melalui tab "Buat Tempahan Baru".</span>
+          </div>
+          <div id="bk-list-items"></div>
+          <div style="margin-top:10px;display:flex;justify-content:flex-end">
+            <button onclick="clearAllBookings()" style="padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;background:#fff;color:#dc2626;border:1px solid #fca5a5;cursor:pointer">ðŸ—‘ï¸ Padam Semua Tempahan</button>
+          </div>
+        </div><!-- /#booking-list-panel -->
+
+      </div><!-- /.feedback-card -->
+    </div>
+  </div>
+
+</div><!-- /.dashboard-content -->
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SMART AI TAB PANEL
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="ai-tab-panel">
+
+  <!-- â•â• SECTION A: 4 AI FUNCTIONS â•â• -->
+  <div class="ai-block ai-fn">
+    <div class="ai-section-head">
+      ðŸ§  AI Functions <span class="ai-badge">4 FUNGSI</span>
+      <span style="font-size:11px;font-weight:400;margin-left:auto;opacity:.8">Analisis automatik berasaskan data pelajar</span>
+    </div>
+    <div class="ai-block-body">
+      <div class="ai-card-grid">
+
+        <!-- AI FN 1: Grade Predictor -->
+        <div class="ai-card" style="--ai-bar:#1d4ed8">
+          <div class="ai-card-icon">ðŸŽ¯</div>
+          <div class="ai-card-title">AI Grade Predictor</div>
+          <div class="ai-card-desc">Ramal gred akhir pelajar berdasarkan markah PB semasa dan trend prestasi CLO.</div>
+          <button class="ai-run-btn blue" onclick="runGradePredictor()">â–¶ Jalankan Ramalan</button>
+          <div id="out-grade-pred" class="ai-output"></div>
+        </div>
+
+        <!-- AI FN 2: At-Risk Detector -->
+        <div class="ai-card" style="--ai-bar:#ef4444">
+          <div class="ai-card-icon">âš ï¸</div>
+          <div class="ai-card-title">AI At-Risk Detector</div>
+          <div class="ai-card-desc">Kesan pelajar berisiko gagal secara automatik berdasarkan ambang markah kritikal per CLO.</div>
+          <button class="ai-run-btn blue" onclick="runAtRisk()">â–¶ Kesan Risiko</button>
+          <div id="out-at-risk" class="ai-output"></div>
+        </div>
+
+        <!-- AI FN 3: Performance Analyser -->
+        <div class="ai-card" style="--ai-bar:#f59e0b">
+          <div class="ai-card-icon">ðŸ“Š</div>
+          <div class="ai-card-title">AI Performance Analyser</div>
+          <div class="ai-card-desc">Analisis mendalam corak prestasi pelajar merentasi semua CLO dan komponen penilaian.</div>
+          <button class="ai-run-btn blue" onclick="runPerfAnalyser()">â–¶ Analisis Prestasi</button>
+          <div id="out-perf" class="ai-output"></div>
+        </div>
+
+        <!-- AI FN 4: Study Gap Finder -->
+        <div class="ai-card" style="--ai-bar:#22c55e">
+          <div class="ai-card-icon">ðŸ”</div>
+          <div class="ai-card-title">AI Study Gap Finder</div>
+          <div class="ai-card-desc">Kenal pasti jurang pembelajaran (knowledge gap) spesifik berdasarkan markah ujian dan kuiz.</div>
+          <button class="ai-run-btn blue" onclick="runGapFinder()">â–¶ Cari Jurang Belajar</button>
+          <div id="out-gap" class="ai-output"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- â•â• SECTION B: 4 AI GENERATORS â•â• -->
+  <div class="ai-block ai-gen">
+    <div class="ai-section-head">
+      âœ¨ AI Generators <span class="ai-badge">4 PENJANA</span>
+      <span style="font-size:11px;font-weight:400;margin-left:auto;opacity:.8">Jana kandungan automatik untuk pelajar & pensyarah</span>
+    </div>
+    <div class="ai-block-body">
+      <div class="ai-card-grid">
+
+        <!-- GEN 1: Exam Question Generator -->
+        <div class="ai-card" style="--ai-bar:#7c3aed">
+          <div class="ai-card-icon">ðŸ“</div>
+          <div class="ai-card-title">Exam Question Generator</div>
+          <div class="ai-card-desc">Jana soalan peperiksaan lazim berdasarkan topik modul SKU10243 yang dipilih.</div>
+          <select id="gen-topic" style="width:100%;padding:6px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;margin-bottom:8px">
+            <option value="mother">Mother Sauces (Modul 4)</option>
+            <option value="hygiene">Food Hygiene & HACCP (Modul 1)</option>
+            <option value="knife">Knife Skills (Modul 2)</option>
+            <option value="cooking">Cooking Methods (Modul 3)</option>
+          </select>
+          <button class="ai-run-btn purple" onclick="runExamGen()">âœ¨ Jana Soalan</button>
+          <div id="out-exam-gen" class="ai-output"></div>
+        </div>
+
+        <!-- GEN 2: Study Notes Generator -->
+        <div class="ai-card" style="--ai-bar:#7c3aed">
+          <div class="ai-card-icon">ðŸ“š</div>
+          <div class="ai-card-title">Study Notes Generator</div>
+          <div class="ai-card-desc">Jana nota ringkas belajar dalam format poin-poin untuk semua modul SKU10243.</div>
+          <select id="gen-notes-topic" style="width:100%;padding:6px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;margin-bottom:8px">
+            <option value="bechamel">BÃ©chamel Sauce</option>
+            <option value="moist">Moist Heat Methods</option>
+            <option value="haccp">HACCP Principles</option>
+            <option value="stocks">Stocks & Bases</option>
+          </select>
+          <button class="ai-run-btn purple" onclick="runNotesGen()">âœ¨ Jana Nota</button>
+          <div id="out-notes-gen" class="ai-output"></div>
+        </div>
+
+        <!-- GEN 3: Feedback Letter Generator -->
+        <div class="ai-card" style="--ai-bar:#7c3aed">
+          <div class="ai-card-icon">ðŸ’Œ</div>
+          <div class="ai-card-title">Feedback Letter Generator</div>
+          <div class="ai-card-desc">Jana surat maklum balas rasmi pensyarah kepada pelajar berdasarkan status prestasi semasa.</div>
+          <select id="gen-fb-type" style="width:100%;padding:6px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;margin-bottom:8px">
+            <option value="warn">Amaran Prestasi Rendah</option>
+            <option value="good">Pujian Prestasi Baik</option>
+            <option value="final">Galakan Peperiksaan Akhir</option>
+          </select>
+          <button class="ai-run-btn purple" onclick="runFeedbackGen()">âœ¨ Jana Surat</button>
+          <div id="out-fb-gen" class="ai-output"></div>
+        </div>
+
+        <!-- GEN 4: Study Schedule Generator -->
+        <div class="ai-card" style="--ai-bar:#7c3aed">
+          <div class="ai-card-icon">ðŸ“…</div>
+          <div class="ai-card-title">Study Schedule Generator</div>
+          <div class="ai-card-desc">Jana jadual ulang kaji peribadi 2-minggu sebelum peperiksaan berdasarkan kelemahan CLO.</div>
+          <button class="ai-run-btn purple" onclick="runScheduleGen()">âœ¨ Jana Jadual</button>
+          <div id="out-sched-gen" class="ai-output"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- â•â• SECTION C: 4 AI SIMULATORS â•â• -->
+  <div class="ai-block ai-sim">
+    <div class="ai-section-head">
+      ðŸŽ® AI Simulators <span class="ai-badge">4 SIMULATOR</span>
+      <span style="font-size:11px;font-weight:400;margin-left:auto;opacity:.8">Latihan interaktif berasaskan AI</span>
+    </div>
+    <div class="ai-block-body">
+
+      <!-- SIM 1: Mock Exam Simulator -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">ðŸŽ“ SIM 1: Mock Exam Simulator â€” Peperiksaan Cuba SKU10243</div>
+        <div id="mock-exam-area">
+          <div class="quiz-q" id="mock-q">Tekan "Mula Peperiksaan" untuk memulakan soalan rawak.</div>
+          <div class="quiz-opts" id="mock-opts"></div>
+          <div class="quiz-result" id="mock-result"></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="ai-run-btn teal" onclick="startMockExam()">ðŸŽ“ Mula Peperiksaan</button>
+            <span id="mock-score-txt" style="font-size:12px;color:#57606a"></span>
+          </div>
+          <div class="quiz-score-bar" style="margin-top:10px"><div class="quiz-score-fill" id="mock-score-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- SIM 2: Mother Sauce Quiz -->
+      <div style="margin-bottom:20px;border-top:1px solid #e5e7eb;padding-top:16px">
+        <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">ðŸ² SIM 2: Mother Sauce Quiz â€” Kenali 5 Sos Ibu</div>
+        <div id="sauce-quiz-area">
+          <div class="quiz-q" id="sauce-q">Tekan "Mula Kuiz" untuk menguji pengetahuan anda tentang Mother Sauces!</div>
+          <div class="quiz-opts" id="sauce-opts"></div>
+          <div class="quiz-result" id="sauce-result"></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="ai-run-btn teal" onclick="startSauceQuiz()">ðŸ² Mula Kuiz</button>
+            <span id="sauce-score-txt" style="font-size:12px;color:#57606a"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIM 3: Cooking Method Simulator -->
+      <div style="margin-bottom:20px;border-top:1px solid #e5e7eb;padding-top:16px">
+        <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:10px">ðŸ³ SIM 3: Cooking Method Explorer â€” Pilih &amp; Ketahui</div>
+        <div class="method-selector" id="method-chips">
+          <span class="method-chip" onclick="showMethod('poaching',this)">Poaching</span>
+          <span class="method-chip" onclick="showMethod('simmering',this)">Simmering</span>
+          <span class="method-chip" onclick="showMethod('boiling',this)">Boiling</span>
+          <span class="method-chip" onclick="showMethod('steaming',this)">Steaming</span>
+          <span class="method-chip" onclick="showMethod('sauteing',this)">SautÃ©ing</span>
+          <span class="method-chip" onclick="showMethod('roasting',this)">Roasting</span>
+          <span class="method-chip" onclick="showMethod('grilling',this)">Grilling</span>
+          <span class="method-chip" onclick="showMethod('deepfry',this)">Deep-Frying</span>
+        </div>
+        <div class="method-detail" id="method-detail"></div>
+      </div>
+
+      <!-- SIM 4: Final Grade Simulator -->
+      <div style="border-top:1px solid #e5e7eb;padding-top:16px">
+        <div style="font-size:13px;font-weight:700;color:#0891b2;margin-bottom:12px">ðŸ“ˆ SIM 4: Final Grade Simulator â€” Tetapkan Sasaran Peperiksaan</div>
+        <div class="sim-slider-row">
+          <label>Kuiz 1 (7.5%)</label>
+          <input type="range" min="0" max="7.5" step="0.25" value="6.75" id="sl-kuiz" oninput="updateGradeSim()">
+          <span class="sim-val" id="sv-kuiz">6.75</span>
+        </div>
+        <div class="sim-slider-row">
+          <label>Ujian Teori (7.5%)</label>
+          <input type="range" min="0" max="7.5" step="0.25" value="3.00" id="sl-ujian" oninput="updateGradeSim()">
+          <span class="sim-val" id="sv-ujian">3.00</span>
+        </div>
+        <div class="sim-slider-row">
+          <label>Pembentangan (10%)</label>
+          <input type="range" min="0" max="10" step="0.25" value="6.50" id="sl-pres" oninput="updateGradeSim()">
+          <span class="sim-val" id="sv-pres">6.50</span>
+        </div>
+        <div class="sim-slider-row">
+          <label>Tugasan Kumpulan (20%)</label>
+          <input type="range" min="0" max="20" step="0.25" value="15.20" id="sl-group" oninput="updateGradeSim()">
+          <span class="sim-val" id="sv-group">15.20</span>
+        </div>
+        <div class="sim-slider-row">
+          <label>Peperiksaan Akhir (25%)</label>
+          <input type="range" min="0" max="25" step="0.25" value="17.55" id="sl-final" oninput="updateGradeSim()">
+          <span class="sim-val" id="sv-final">17.55</span>
+        </div>
+        <div class="sim-grade-display" id="sim-grade-box">
+          <div class="sim-grade-big" id="sim-grade-letter">B</div>
+          <div style="font-size:22px;font-weight:700;color:#1d4ed8;margin:4px 0" id="sim-total-pct">49.00 / 70</div>
+          <div class="sim-grade-label" id="sim-grade-msg">Sasaran Gred B â€” Sesuai untuk Peperiksaan Akhir</div>
+          <div style="margin-top:8px">
+            <div class="prog-bar-track"><div class="prog-bar-fill" id="sim-grade-bar" style="--fill:#1d4ed8;width:70%"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer" style="margin-top:8px">Made with IBM Bob</div>
+</div><!-- /#ai-tab-panel -->
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     ANALISIS MARKAH TAB PANEL
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="analisis-tab-panel">
+
+  <!-- KPI Summary -->
+  <div class="section">
+    <div class="section-label" style="--accent:#e05252">ðŸ”´ Ringkasan Keseluruhan Kelas â€” 21 Pelajar</div>
+    <div class="an-kpi-row">
+      <div class="an-kpi" style="--ab:#e05252;--av:#dc2626">
+        <div class="an-kpi-label">Jumlah Pelajar</div>
+        <div class="an-kpi-val">21</div>
+        <div class="an-kpi-sub">Keseluruhan kelas</div>
+      </div>
+      <div class="an-kpi" style="--ab:#ef4444;--av:#dc2626">
+        <div class="an-kpi-label">Gred F (Gagal)</div>
+        <div class="an-kpi-val" id="an-kpi-f">â€”</div>
+        <div class="an-kpi-sub">Markah &lt; 50%</div>
+      </div>
+      <div class="an-kpi" style="--ab:#f59e0b;--av:#92400e">
+        <div class="an-kpi-label">Risiko Tinggi</div>
+        <div class="an-kpi-val" id="an-kpi-risk">â€”</div>
+        <div class="an-kpi-sub">Jumlah &lt; 42%</div>
+      </div>
+      <div class="an-kpi" style="--ab:#3b82d4;--av:#1d4ed8">
+        <div class="an-kpi-label">Purata PB Kelas</div>
+        <div class="an-kpi-val" id="an-kpi-avg">â€”</div>
+        <div class="an-kpi-sub">Daripada 100%</div>
+      </div>
+      <div class="an-kpi" style="--ab:#22c55e;--av:#166534">
+        <div class="an-kpi-label">Lulus (â‰¥50%)</div>
+        <div class="an-kpi-val" id="an-kpi-pass">â€”</div>
+        <div class="an-kpi-sub">Bilangan pelajar</div>
+      </div>
+      <div class="an-kpi" style="--ab:#7c5cd8;--av:#6b21a8">
+        <div class="an-kpi-label">CLO1 Lemah</div>
+        <div class="an-kpi-val" id="an-kpi-clo1">â€”</div>
+        <div class="an-kpi-sub">UT1 &lt; 50%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Markah Table -->
+  <div class="section">
+    <div class="section-label" style="--accent:#3b82d4">ðŸ”µ Jadual Markah Penuh â€” 21 Pelajar</div>
+    <div class="an-filter-bar">
+      <span style="font-size:11px;font-weight:700;color:#57606a">Tapis:</span>
+      <button class="an-filter-btn active" onclick="anFilter('all',this)">Semua (21)</button>
+      <button class="an-filter-btn" onclick="anFilter('high',this)">ðŸ”´ Risiko Tinggi</button>
+      <button class="an-filter-btn" onclick="anFilter('med',this)">ðŸŸ¡ Perlu Pantau</button>
+      <button class="an-filter-btn" onclick="anFilter('low',this)">ðŸŸ¢ Selamat</button>
+      <button class="an-filter-btn" onclick="anFilter('fail',this)">âŒ Gagal &lt;50%</button>
+    </div>
+    <div class="an-tbl-wrap">
+      <table class="an-tbl">
+        <thead>
+          <tr>
+            <th rowspan="2">#</th>
+            <th rowspan="2" style="text-align:left;min-width:190px">Nama Pelajar</th>
+            <th colspan="2" style="background:#1a4a7a">CLO1 â€” Teori</th>
+            <th colspan="2" style="background:#155a3a">CLO2 â€” Praktikal</th>
+            <th style="background:#4a3a0a">CLO3</th>
+            <th colspan="2" style="background:#2a1a5a">Jumlah</th>
+            <th rowspan="2">Status</th>
+            <th rowspan="2">Risiko</th>
+          </tr>
+          <tr class="an-sub">
+            <th>K1 /7.5</th>
+            <th>UT1 /100</th>
+            <th>T /100</th>
+            <th>P1 /20</th>
+            <th>K2 /10</th>
+            <th>PB %</th>
+            <th>Jumlah</th>
+          </tr>
+        </thead>
+        <tbody id="an-table-body"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" style="text-align:left">Bil. Pelajar lulus (â‰¥50%)</td>
+            <td>20</td><td id="an-f-ut1">9</td><td id="an-f-t">9</td>
+            <td>21</td><td>21</td>
+            <td id="an-f-pb">â€”</td><td id="an-f-jum">â€”</td><td colspan="2"></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:left">Peratusan lulus (â‰¥50%)</td>
+            <td>95%</td><td>42%</td><td>42%</td>
+            <td>100%</td><td>100%</td>
+            <td id="an-f-pb-pct">â€”</td><td id="an-f-jum-pct">â€”</td><td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- At-Risk Cards -->
+  <div class="section">
+    <div class="section-label" style="--accent:#ef4444">ðŸ”´ Senarai Pelajar Memerlukan Pemantauan</div>
+    <div class="an-risk-grid" id="an-risk-grid"></div>
+  </div>
+
+  <!-- Feedback Cards -->
+  <div class="section">
+    <div class="section-label" style="--accent:#f59e0b">ðŸŸ¡ Maklum Balas Pensyarah Kepada Pelajar Dipantau</div>
+    <div id="an-feedback-section"></div>
+  </div>
+
+  <!-- CLO Analysis -->
+  <div class="section">
+    <div class="section-label" style="--accent:#7c5cd8">ðŸŸ£ Analisis Pencapaian CLO Keseluruhan Kelas</div>
+    <div class="an-clo-grid" id="an-clo-grid"></div>
+  </div>
+
+  <div class="footer" style="margin-top:8px">Made with IBM Bob</div>
+</div><!-- /#analisis-tab-panel -->
+
+  <!-- â•â•â•â•â•â•â•â• PRINT SIGNATURE BOX â•â•â•â•â•â•â•â• -->
+  <div class="signature-box" style="display:none" id="sig-box">
+    <div style="font-size:12px;font-weight:700;color:#1f2328;margin-bottom:8px">Tandatangan &amp; Pengesahan Rasmi</div>
+    <div class="sig-row">
+      <div class="sig-cell">Pensyarah / Lecturer<br><br><br>______________________<br>Nama: ______________________<br>Tarikh: _____________</div>
+      <div class="sig-cell">Ketua Program / Head of Programme<br><br><br>______________________<br>Nama: ______________________<br>Tarikh: _____________</div>
+      <div class="sig-cell">Cap Rasmi / Official Stamp<br><br><br><br><br></div>
+    </div>
+  </div>
+
+  <div class="footer">Made with IBM Bob</div>
+</div>
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     QR CODE MODAL
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="modal-overlay" id="qr-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeQR()">âœ•</button>
+    <div class="modal-title">ðŸ“± Share Dashboard</div>
+    <div class="modal-sub">Imbas kod QR untuk buka dashboard ini di telefon anda</div>
+    <canvas id="qr-canvas" width="200" height="200"></canvas>
+    <div class="modal-url" id="qr-url-text"></div>
+    <div style="margin-top:12px;font-size:11px;color:#57606a">Gunakan kamera telefon atau aplikasi QR untuk mengimbas</div>
+  </div>
+</div>
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     FAQ CHATBOT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<button class="faq-btn" id="faq-btn" onclick="toggleFAQ()" title="Tanya Soalan">ðŸ’¬</button>
+<div class="faq-panel" id="faq-panel">
+  <div class="faq-panel-head">
+    <div>
+      <div class="faq-panel-title">ðŸ¤– FAQ Pembantu SKU10243</div>
+      <div style="font-size:10px;color:#93b8e0">39 soalan + 9 Spot Topik â€” taip atau pilih</div>
+    </div>
+    <button class="faq-close" onclick="toggleFAQ()">âœ•</button>
+  </div>
+  <div class="faq-messages" id="faq-messages">
+    <div class="faq-msg bot">ðŸ‘‹ Salam! Saya pembantu FAQ SKU10243. Apa yang anda ingin tahu hari ini? Pilih soalan di bawah atau taip sendiri!</div>
+  </div>
+  <div class="faq-suggestions" id="faq-chips">
+    <span class="faq-chip" onclick="askFAQ(this)">Spot Topik Exam</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 5 Red Meat</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 6 Poultry</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 7 Fish</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 1 Peralatan</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 3 Stok Sup Sos</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Apa itu Mother Sauces?</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Beza Moist &amp; Dry Heat?</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Dry aging</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Barding vs Brining?</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 8 Tenusu Telur</span>
+    <span class="faq-chip" onclick="askFAQ(this)">Topik 9 Bahan Kering</span>
+  </div>
+  <div class="faq-input-row">
+    <input type="text" class="faq-input" id="faq-input" placeholder="Taip soalan anda..." onkeydown="if(event.key==='Enter')sendFAQ()" />
+    <button class="faq-send" onclick="sendFAQ()">Hantar</button>
+  </div>
+</div>
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     JAVASCRIPT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<script>
+/* â”€â”€ FAQ Knowledge Base (30 Q&A) â”€â”€ */
+const FAQ_DB = [
+  { q: ["mother sauces","sos ibu","5 sos"], a: "5 Mother Sauces (Sos Ibu) dalam masakan klasik Perancis ialah:<br>1. <b>BÃ©chamel</b> â€” Susu + Roux Putih<br>2. <b>VeloutÃ©</b> â€” Stok Putih + Roux<br>3. <b>Espagnole</b> â€” Stok Coklat + Mirepoix<br>4. <b>Hollandaise</b> â€” Kuning Telur + Mentega<br>5. <b>Tomato</b> â€” Tomato + Stok + Mirepoix" },
+  { q: ["lulus","pass","peperiksaan","exam","markah minimum"], a: "Untuk lulus SKU10243 dengan gred C (50%), anda perlu mendapat sekurang-kurangnya <b>2.55/25</b> dalam Peperiksaan Akhir. Untuk gred B (65%), sasarkan <b>17.55/25</b>." },
+  { q: ["haccp"], a: "<b>HACCP</b> (Hazard Analysis Critical Control Points) ialah sistem pengurusan keselamatan makanan yang mengenal pasti, menilai, dan mengawal bahaya dalam proses penyediaan makanan. Ia merangkumi 7 prinsip utama daripada analisis bahaya sehingga rekod dokumentasi." },
+  { q: ["moist","dry heat","kaedah memasak","cooking method"], a: "<b>Moist Heat Methods</b>: Poaching, Simmering, Boiling, Steaming, Braising â€” menggunakan cecair/wap.<br><b>Dry Heat Methods</b>: Roasting, Baking, Grilling, SautÃ©ing, Deep-frying â€” haba kering tanpa cecair." },
+  { q: ["hubungi","contact","pensyarah","lecturer","whatsapp"], a: "Anda boleh menghubungi pensyarah SKU10243 melalui:<br>â€¢ <b>WhatsApp</b>: Isninâ€“Khamis, 9amâ€“4pm<br>â€¢ <b>Google Meet Klinik</b>: Jumaat, 10amâ€“12pm (Tempah slot terlebih dahulu)<br>Nyatakan nama, no. matrik, dan topik bimbingan." },
+  { q: ["bÃ©chamel","bechamel"], a: "<b>BÃ©chamel Sauce</b> dibuat daripada susu + roux putih (tepung + mentega). Ia ialah salah satu daripada 5 Mother Sauces. Digunakan dalam Lasagna, Croque Monsieur, dan Moussaka." },
+  { q: ["veloute","veloutÃ©"], a: "<b>VeloutÃ© Sauce</b> dibuat daripada stok putih (ayam, ikan, atau veal) + roux. Ia teksturnya licin dan lembut â€” nama 'veloutÃ©' bermaksud 'bersutera' dalam bahasa Perancis." },
+  { q: ["espagnole"], a: "<b>Espagnole Sauce</b> ialah sos perang dibuat daripada stok daging coklat, mirepoix (lobak, bawang, saderi), dan tomato paste. Ia asas kepada Sauce Robert dan Sauce Chasseur." },
+  { q: ["hollandaise"], a: "<b>Hollandaise Sauce</b> dibuat daripada emulsifikasi kuning telur dengan mentega cair dan jus lemon. Ia emulsi yang tidak stabil â€” perlu dijaga suhu 60â€“70Â°C. Digunakan dalam Eggs Benedict." },
+  { q: ["clo 1","teori","theory"], a: "CLO 1 menilai Teori & Pengetahuan melalui Kuiz dan Ujian Teori. Markah semasa: 9.75/15 (65%). âš ï¸ Perlu peningkatan â€” fokus pada terminologi kaedah memasak dan food science." },
+  { q: ["clo 2","praktikal","practical"], a: "CLO 2 menilai Kemahiran Praktikal melalui Tugasan & Dapur Amali. Markah semasa: 21.70/30 (76%). âœ… Prestasi baik! Teruskan konsistensi dalam teknik potongan dan memasak." },
+  { q: ["clo 3","etika","sikap","attitude","ethics"], a: "CLO 3 menilai Etika & Sikap melalui kehadiran, keselamatan dapur, dan pembentangan. Status: Dalam Pemantauan. Pastikan kehadiran penuh dan patuhi prosedur keselamatan dapur." },
+  { q: ["kuiz","quiz","kuiz 1"], a: "Kuiz 1 telah selesai dengan markah 6.75/7.50 (90%). âœ… Prestasi cemerlang! Teruskan strategi ulang kaji yang sama untuk Peperiksaan Akhir." },
+  { q: ["ujian teori","theory test"], a: "Ujian Teori 1 mendapat markah 3.00/7.50 (40%). âš ï¸ Ini markah yang perlu diambil serius. Sila minta bimbingan pensyarah dan ulang kaji asas kaedah memasak." },
+  { q: ["tugasan kumpulan","group assignment"], a: "Tugasan Kumpulan telah selesai dengan markah 15.20/20.00 (76%). âœ… Kerja berpasukan yang memuaskan! Pensyarah memuji kerjasama pasukan anda." },
+  { q: ["pembentangan","presentation"], a: "Pembentangan 1 mendapat markah 6.50/10.00 (65%). Sila lihat ulasan pensyarah untuk mengetahui aspek yang boleh ditingkatkan dalam pembentangan akan datang." },
+  { q: ["poaching"], a: "<b>Poaching</b> ialah kaedah memasak Moist Heat di mana makanan dimasak dalam cecair panas (71â€“82Â°C) â€” di bawah takat didih. Sesuai untuk telur, ikan, dan buah-buahan." },
+  { q: ["simmering"], a: "<b>Simmering</b> ialah kaedah memasak di mana cecair dipanaskan pada 85â€“96Â°C (gelembung kecil). Digunakan untuk membuat stok, sup, dan masakan yang memerlukan masa panjang." },
+  { q: ["sautÃ©","sauteing"], a: "<b>SautÃ©ing</b> ialah kaedah Dry Heat menggunakan kuali panas dengan sedikit minyak pada suhu tinggi untuk masa yang singkat. Makanan perlu dipotong kecil dan rata." },
+  { q: ["roasting"], a: "<b>Roasting</b> ialah kaedah Dry Heat menggunakan ketuhar (oven) dengan haba panas kering. Sesuai untuk daging besar, ayam, dan sayuran. Menghasilkan warna keemasan (Maillard reaction)." },
+  { q: ["knife","pisau","potongan","julienne","brunoise"], a: "Teknik potongan utama: <b>Julienne</b> (2mm Ã— 2mm Ã— 6cm, seperti batang korek api), <b>Brunoise</b> (2mm Ã— 2mm dadu kecil daripada Julienne), <b>Chiffonade</b> (hirisan nipis daun), <b>Dice</b> (dadu pelbagai saiz)." },
+  { q: ["hygiene","kebersihan","food safety","keselamatan makanan"], a: "Prinsip kebersihan makanan utama: âœ… Cuci tangan 20 saat, âœ… Pisahkan makanan mentah & masak, âœ… Masak pada suhu selamat (>74Â°C), âœ… Sejukkan bawah 4Â°C dalam 2 jam." },
+  { q: ["mirepoix"], a: "<b>Mirepoix</b> ialah campuran sayuran aromatik (2 bahagian bawang + 1 bahagian lobak merah + 1 bahagian saderi) yang digunakan sebagai asas perasa dalam stok, sup, dan sos." },
+  { q: ["roux"], a: "<b>Roux</b> ialah campuran tepung + lemak (biasanya mentega) yang dimasak bersama untuk memekatkan sos. Ada 3 jenis: Roux Putih (White), Roux Blonde, dan Roux Coklat (Brown)." },
+  { q: ["stock","stok"], a: "<b>Stok</b> dibuat dengan merebus tulang/sayuran dalam air untuk mengekstrak rasa. 4 jenis utama: <b>White Stock</b> (Fond Blanc), <b>Brown Stock</b> (Fond Brun), <b>Fish Stock</b> (Fumet), <b>Vegetable Stock</b>." },
+  { q: ["tarikh peperiksaan","exam date","bila peperiksaan"], a: "Peperiksaan Akhir SKU10243 dijadualkan pada <b>25 November 2026</b> di Dewan Peperiksaan. Pastikan anda mendaftar dan tahu bilik peperiksaan anda. Minggu ulang kaji: 18â€“22 November 2025." },
+  { q: ["modul 1"], a: "Modul 1 â€” Keselamatan & Kebersihan Dapur (Food Hygiene & Safety): Merangkumi asas hygiene dapur, HACCP, teknik cuci tangan, dan senarai semak keselamatan dapur." },
+  { q: ["modul 2"], a: "Modul 2 â€” Peralatan Dapur & Teknik Potongan (Knife Skills & Equipment): Merangkumi jenis-jenis pisau, teknik potongan Julienne, Brunoise, Chiffonade, dan carta peralatan dapur." },
+  { q: ["modul 3"], a: "Modul 3 â€” Kaedah Memasak (Moist & Dry Heat Methods): Merangkumi Poaching, Simmering, SautÃ©ing, Roasting, dan carta perbezaan kaedah memasak." },
+  { q: ["modul 4"], a: "Modul 4 â€” Stok, Sup & Sos Asas (Mother Sauces & Stocks): Merangkumi 5 Mother Sauces, resepi BÃ©chamel, VeloutÃ©, Espagnole, Hollandaise, dan Tomato." },
+
+  /* â•â• SPOT TOPIK â€” TOPIK PENEKANAN PEPERIKSAAN â•â• */
+
+  /* Topik 1 â€” Peralatan & Perkakasan Dapur */
+  { q: ["topik 1","peralatan","perkakasan","convection","induction","food processor","chiller","mesin"], a: "ðŸ”§ <b>TOPIK 1: Peralatan & Perkakasan Dapur (SPOT TOPIK)</b><br><br>Fokus peperiksaan:<br>â€¢ <b>Convection Oven</b> â€” ketuhar dengan kipas yang mengedarkan haba secara sekata; masak lebih cepat & seragam<br>â€¢ <b>Induction Hob</b> â€” memasak menggunakan aruhan elektromagnet; hanya periuk logam magnetik berfungsi; lebih selamat & cekap tenaga<br>â€¢ <b>Mesin Pemprosesan (Food Processor)</b> â€” mengisar, memotong, menguli, atau mencampur bahan secara automatik<br>â€¢ <b>Chiller</b> â€” penyejuk 1â€“4Â°C untuk menyimpan bahan segar jangka pendek<br><br>âš ï¸ <b>Yang perlu tahu:</b> Fungsi/Kegunaan setiap peralatan â€” soalan biasanya minta padankan peralatan dengan fungsinya." },
+
+  /* Topik 2 â€” Kaedah Masakan (lanjutan) */
+  { q: ["topik 2","haba kering","haba lembap","perbezaan teknik","steaming","beza haba"], a: "ðŸ³ <b>TOPIK 2: Kaedah Masakan â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Perbezaan Haba Kering vs Haba Lembap</b><br>  â€” Haba Kering: tiada cecair, suhu tinggi (Roasting, Grilling, SautÃ©ing, Deep-frying)<br>  â€” Haba Lembap: menggunakan cecair/wap (Poaching 71â€“82Â°C, Simmering 85â€“96Â°C, Boiling 100Â°C)<br><br>â€¢ <b>Suhu Haba Lembap (WAJIB HAFAL):</b><br>  Poaching â†’ 71â€“82Â°C | Simmering â†’ 85â€“96Â°C | Boiling â†’ 100Â°C<br><br>â€¢ <b>Steaming</b> â€” menggunakan wap >100Â°C; mengekalkan nutrien & warna; sesuai ikan, sayur, dim sum<br><br>â€¢ <b>Teknik Haba Kering beserta contoh:</b><br>  Roasting (ayam, daging besar), Grilling (steak, ikan), SautÃ©ing (sayuran, cendawan)" },
+
+  /* Topik 3 â€” Stok, Sup & Sos */
+  { q: ["topik 3","white stock","brown stock","veloute","aromatic","aromatic ingredients"], a: "ðŸ² <b>TOPIK 3: Stok, Sup & Sos â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Mother Sauce â€” VeloutÃ©</b>: Dibuat daripada <b>White Stock (stok putih)</b> + Roux. Tekstur licin & bersutera. Asas kepada Allemande & Supreme Sauce.<br><br>â€¢ <b>Aromatic Ingredients â€” Mirepoix</b>:<br>  Campuran 2 bahagian bawang + 1 bahagian lobak merah + 1 bahagian saderi. Digunakan untuk perisa stok, sup & sos.<br><br>â€¢ <b>Perbezaan White Stock vs Brown Stock:</b><br>  â€” White Stock (Fond Blanc): tulang TIDAK dibakar â†’ warna cerah/jernih; sesuai untuk VeloutÃ© & BÃ©chamel<br>  â€” Brown Stock (Fond Brun): tulang + sayuran DIBAKAR dahulu â†’ warna gelap & rasa pekat; sesuai untuk Espagnole<br><br>âš ï¸ <b>Ingat:</b> Jangan boil stock kuat â€” simmer sahaja agar tidak keruh!" },
+
+  /* Topik 4 â€” Sayur-Sayuran & Buah-Buahan */
+  { q: ["topik 4","sayur","buah","cabbage","pod","seed","kategori sayuran","buah-buahan"], a: "ðŸ¥¦ <b>TOPIK 4: Sayur-Sayuran & Buah-Buahan â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Kategori Sayuran (dengan contoh):</b><br>  â€” Root vegetables: lobak, ubi keledek, lobak putih<br>  â€” Leafy greens: bayam, salad, kangkung<br>  â€” Stem: saderi, asparagus<br>  â€” Bulb: bawang, bawang putih<br>  â€” Flower: brokoli, bunga kobis<br>  â€” Fruit vegetables: tomato, terung, capsicum<br><br>â€¢ <b>Fokus Cabbage Family:</b> Kobis, brokoli, kembang kol, Brussels sprout â€” semua dalam keluarga Brassica. Kaya vitamin C & serat.<br><br>â€¢ <b>Fokus Pod and Seed:</b> Kacang panjang, kacang pis, bendi, jagung â€” dimakan biji/polong. Tinggi protein & serat.<br><br>âš ï¸ Soalan biasa: padankan sayuran dengan kategorinya." },
+
+  /* Topik 5 â€” Red Meat */
+  { q: ["topik 5","red meat","daging","primal cut","basting","marbling","dry aging","connective","elastin","loin"], a: "ðŸ¥© <b>TOPIK 5: Red Meat â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Potongan Daging â€” Primal Cut:</b> Potongan besar pertama dari karkas sebelum dipotong kecil. Contoh: Chuck, Rib, Loin, Round, Brisket, Flank, Shank.<br><br>â€¢ <b>Kaedah memasak berdasarkan potongan:</b><br>  â€” Loin (lembut) â†’ Dry Heat: Grilling, Roasting<br>  â€” Chuck/Shank (keras) â†’ Moist Heat: Braising, Stewing<br><br>â€¢ <b>Connective Tissues â€” Elastin:</b> Tisu penghubung keras dalam daging yang TIDAK larut walaupun dimasak lama (berbeza dengan kolagen yang boleh larut menjadi gelatin).<br><br>â€¢ <b>Basting:</b> Menyiram/sapu cecair (jus, mentega, sos) pada daging berulang kali semasa membakar untuk mengekalkan kelembapan & rasa.<br><br>â€¢ <b>Marbling:</b> Lemak yang bertaburan dalam tisu otot daging. Semakin tinggi marbling â†’ semakin lembut & berperisa.<br><br>â€¢ <b>Dry Aging:</b> Proses pematangan daging lembu dengan menggantung/menyimpannya di ruangan suhu & kelembapan terkawal. Kelebihan: daging lebih lembut, rasa umami lebih pekat, tekstur lebih padat, masak lebih cepat." },
+
+  /* Topik 6 â€” Poultry & Game Birds */
+  { q: ["topik 6","poultry","ayam","game bird","light meat","dark meat","barding","trussing","brining"], a: "ðŸ— <b>TOPIK 6: Poultry & Game Birds â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Light Meat vs Dark Meat:</b><br>  â€” Light Meat: dada ayam â€” rendah lemak, putih, masak cepat, cenderung kering jika overcooked<br>  â€” Dark Meat: peha & kaki â€” lebih lemak, gelap, lembut, tahan masak lebih lama<br><br>â€¢ <b>Teknik mengekalkan kelembapan semasa membakar whole chicken:</b><br>  â€” <b>Basting</b>: Siram permukaan dengan mentega cair/jus semasa dalam ketuhar<br>  â€” <b>Brining</b>: Rendam dalam larutan air+garam+herba sebelum dibakar â€” sel daging menyerap lebih banyak air<br>  â€” <b>Trussing</b>: Ikat karkas ayam dengan tali supaya bentuk padat & panas sekata â€” kurangkan kehilangan jus<br>  â€” <b>Barding</b>: Balut dengan lapisan lemak/bacon untuk melindungi bahagian kering (contoh: dada) daripada haba langsung<br><br>âš ï¸ Soalan biasa: jelaskan perbezaan Basting vs Brining vs Barding." },
+
+  /* Topik 7 â€” Fish & Shellfish */
+  { q: ["topik 7","fish","ikan","shellfish","mollusk","la darne","steak ikan","market form","kesegaran"], a: "ðŸŸ <b>TOPIK 7: Fish & Shellfish â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Market Forms (bentuk potongan ikan):</b><br>  â€” Whole/Round: ikan penuh, belum diproses<br>  â€” Drawn: ikan penuh, organ dalam dibuang<br>  â€” Dressed/Pan-dressed: organ & sisik dibuang<br>  â€” Fillet: isi tanpa tulang, dipotong memanjang<br>  â€” Steak/La Darne: irisan rentas (cross-section) dari ikan besar; ada tulang; contoh: salmon steak<br><br>â€¢ <b>Suhu penyimpanan ikan beku:</b> â€“18Â°C atau lebih rendah<br><br>â€¢ <b>Tanda kesegaran ikan:</b> Mata jernih & menonjol, insang merah terang, bau segar/laut, daging kenyal bila ditekan, sisik melekat kuat.<br><br>â€¢ <b>Kategori Shellfish â€” Mollusk:</b><br>  â€” Bivalve: kerang, tiram, kupang (2 cengkerang)<br>  â€” Univalve: siput (1 cengkerang)<br>  â€” Cephalopod: sotong, cumi-cumi, octopus" },
+
+  /* Topik 8 â€” Produk Tenusu & Telur */
+  { q: ["topik 8","tenusu","telur","cheese","semisoft","bel paese","bijirin","komposisi telur","dairy"], a: "ðŸ§€ <b>TOPIK 8: Produk Tenusu & Telur â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Jenis Produk Tenusu:</b> Susu segar, krim, mentega, yogurt, keju (cheese)<br><br>â€¢ <b>Kaedah memasak â€” Bijirin (cereals/grains):</b> Dimasak dengan pelbagai kaedah â€” boiling (nasi, pasta), baking (roti), steaming (couscous)<br><br>â€¢ <b>Semisoft Cheese â€” Bel Paese:</b> Keju Italy yang lembut & berkrim, rasa ringan & mild. Contoh keju semisoft lain: Havarti, Munster, Fontina.<br><br>â€¢ <b>Kegunaan Telur dalam hidangan:</b><br>  â€” Pengikat (binding): burger, meatball<br>  â€” Pemekat (thickening): custard, sos<br>  â€” Pengemulsi (emulsifying): mayonis, Hollandaise<br>  â€” Penaik (leavening): soufflÃ©, kek<br>  â€” Penyalut (coating): breaded chicken<br><br>â€¢ <b>Komposisi Telur:</b><br>  â€” Kuning telur (yolk): Â±33% â€” lemak, lesitin (pengemulsi), vitamin A/D<br>  â€” Putih telur (albumen): Â±58% â€” protein, air<br>  â€” Kulit telur: Â±9% â€” kalsium karbonat" },
+
+  /* Topik 9 â€” Bahan Kering */
+  { q: ["topik 9","bahan kering","rempah","penyimpanan rempah","dry goods","herbs","spices"], a: "ðŸŒ¿ <b>TOPIK 9: Bahan Kering â€” SPOT TOPIK</b><br><br>Penekanan utama:<br>â€¢ <b>Cara penyimpanan rempah yang betul:</b><br>  â€” Simpan dalam bekas kedap udara (airtight container)<br>  â€” Jauhkan daripada cahaya matahari langsung, haba, dan kelembapan<br>  â€” Suhu bilik yang sejuk & kering (bukan berhampiran dapur/stove)<br>  â€” Label dengan nama & tarikh pembelian<br>  â€” Jangan simpan berdekatan steam atau wap memasak<br><br>â€¢ <b>Kaedah penyimpanan bahan kering:</b><br>  â€” FIFO (First In, First Out): barang lama digunakan dahulu<br>  â€” Simpan di rak dengan sirkulasi udara baik<br>  â€” Bekas bertutup rapat â€” elakkan serangga & kelembapan<br>  â€” Tepung, gula, garam: simpan berasingan dalam bekas berlabel<br>  â€” Periksa tarikh luput secara berkala<br><br>âš ï¸ <b>Ingat:</b> Rempah serbuk kehilangan aroma lebih cepat daripada rempah utuh â€” guna dalam 6â€“12 bulan." },
+
+  /* General spot topik query */
+  { q: ["spot topik","topik exam","topik peperiksaan","ulang kaji","penekanan","fokus exam"], a: "ðŸ“Œ <b>SPOT TOPIK SKU10243 â€” 9 Topik Penekanan Peperiksaan</b><br><br>1ï¸âƒ£ <b>Topik 1</b>: Peralatan & Perkakasan Dapur (Convection Oven, Induction Hob, Food Processor, Chiller)<br>2ï¸âƒ£ <b>Topik 2</b>: Kaedah Masakan â€” Haba Kering vs Haba Lembap, Suhu, Steaming<br>3ï¸âƒ£ <b>Topik 3</b>: Stok, Sup & Sos â€” VeloutÃ©, Mirepoix, White vs Brown Stock<br>4ï¸âƒ£ <b>Topik 4</b>: Sayur & Buah â€” Kategori, Cabbage Family, Pod & Seed<br>5ï¸âƒ£ <b>Topik 5</b>: Red Meat â€” Primal Cut, Basting, Marbling, Dry Aging, Elastin<br>6ï¸âƒ£ <b>Topik 6</b>: Poultry & Game Birds â€” Light/Dark Meat, Basting/Brining/Trussing/Barding<br>7ï¸âƒ£ <b>Topik 7</b>: Fish & Shellfish â€” Market Forms, La Darne, Kesegaran, Mollusk<br>8ï¸âƒ£ <b>Topik 8</b>: Produk Tenusu & Telur â€” Bel Paese, Komposisi Telur, Kegunaan Telur<br>9ï¸âƒ£ <b>Topik 9</b>: Bahan Kering â€” Cara Simpan Rempah, FIFO, Bahan Kering<br><br>ðŸ’¬ Taip nama topik (cth: <i>topik 5</i> atau <i>red meat</i> atau <i>dry aging</i>) untuk maklumat terperinci!" },
+];
+
+/* â”€â”€ FAQ Engine â”€â”€ */
+function findFAQAnswer(text) {
+  const t = text.toLowerCase();
+  for (const item of FAQ_DB) {
+    if (item.q.some(k => t.includes(k))) return item.a;
+  }
+  return "Maaf, saya tidak jumpa jawapan untuk soalan itu. Cuba tanya soalan yang lebih spesifik atau hubungi pensyarah secara langsung melalui WhatsApp. ðŸ“ž";
+}
+
+function addMsg(text, type) {
+  const msgs = document.getElementById('faq-messages');
+  const div = document.createElement('div');
+  div.className = 'faq-msg ' + type;
+  div.innerHTML = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function askFAQ(el) {
+  const q = el.textContent;
+  addMsg(q, 'user');
+  setTimeout(() => addMsg(findFAQAnswer(q), 'bot'), 300);
+}
+
+function sendFAQ() {
+  const inp = document.getElementById('faq-input');
+  const q = inp.value.trim();
+  if (!q) return;
+  addMsg(q, 'user');
+  inp.value = '';
+  setTimeout(() => addMsg(findFAQAnswer(q), 'bot'), 300);
+}
+
+function toggleFAQ() {
+  const panel = document.getElementById('faq-panel');
+  panel.classList.toggle('open');
+}
+
+/* â”€â”€ QR Code Generator (pure canvas, no external lib) â”€â”€ */
+function openQR() {
+  const url = window.location.href;
+  document.getElementById('qr-url-text').textContent = url;
+  // Draw a simple symbolic QR placeholder with URL encoded as text
+  drawQR(url);
+  document.getElementById('qr-modal').classList.add('open');
+}
+function closeQR() {
+  document.getElementById('qr-modal').classList.remove('open');
+}
+
+function drawQR(url) {
+  const canvas = document.getElementById('qr-canvas');
+  const ctx = canvas.getContext('2d');
+  const size = 200;
+  canvas.width = size;
+  canvas.height = size;
+
+  // Background
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, size, size);
+
+  // Generate a deterministic pixel pattern from URL string
+  const cells = 21;
+  const cellSize = Math.floor((size - 16) / cells);
+  const offset = 8;
+
+  // Seed from URL characters
+  let seed = 0;
+  for (let i = 0; i < url.length; i++) seed = (seed * 31 + url.charCodeAt(i)) & 0xFFFFFF;
+
+  function pseudoRand(x, y) {
+    let v = (seed ^ (x * 0x1F7 + y * 0x3D3)) & 0xFFFF;
+    v = ((v >> 5 ^ v) * 0xA7 + x * 0x1F + y * 0x1B) & 0xFF;
+    return v > 127;
+  }
+
+  ctx.fillStyle = '#1e3a5f';
+
+  for (let r = 0; r < cells; r++) {
+    for (let c = 0; c < cells; c++) {
+      // Fixed finder patterns (corners)
+      const inTopLeft    = r < 7 && c < 7;
+      const inTopRight   = r < 7 && c >= cells - 7;
+      const inBottomLeft = r >= cells - 7 && c < 7;
+
+      let dark = false;
+      if (inTopLeft || inTopRight || inBottomLeft) {
+        const lr = inTopLeft ? r : inTopRight ? r : r - (cells - 7);
+        const lc = inTopLeft ? c : inTopRight ? c - (cells - 7) : c;
+        dark = (lr === 0 || lr === 6 || lc === 0 || lc === 6) ||
+               (lr >= 2 && lr <= 4 && lc >= 2 && lc <= 4);
+      } else {
+        dark = pseudoRand(r, c);
+      }
+
+      if (dark) {
+        ctx.fillRect(offset + c * cellSize, offset + r * cellSize, cellSize - 1, cellSize - 1);
+      }
+    }
+  }
+
+  // URL label below QR
+  ctx.fillStyle = '#57606a';
+  ctx.font = '9px -apple-system, Segoe UI, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Imbas untuk buka dashboard', size / 2, size - 2);
+}
+
+/* â”€â”€ View Switcher â”€â”€ */
+let currentView = 'exec';
+function switchView(v) {
+  currentView = v;
+  const container  = document.getElementById('main-container');
+  const isAI       = v === 'ai';
+  const isAnalisis = v === 'analisis';
+  container.classList.toggle('show-ai',       isAI);
+  container.classList.toggle('show-analisis', isAnalisis);
+  if (!isAI && !isAnalisis) {
+    container.classList.remove('view-exec','view-ops');
+    container.classList.add(v === 'exec' ? 'view-exec' : 'view-ops');
+  }
+  document.getElementById('tab-exec').classList.toggle('active',     v === 'exec');
+  document.getElementById('tab-ops').classList.toggle('active',      v === 'ops');
+  document.getElementById('tab-ai').classList.toggle('active',       v === 'ai');
+  document.getElementById('tab-analisis').classList.toggle('active', v === 'analisis');
+  document.getElementById('ai-tab-panel').classList.toggle('active',       isAI);
+  document.getElementById('analisis-tab-panel').classList.toggle('active', isAnalisis);
+  if (isAnalisis) anInitAnalisis();
+  try { localStorage.setItem('sku10243_view', v); } catch(e) {}
+}
+
+/* â”€â”€ LocalStorage Persistence â”€â”€ */
+const LS_KEY = 'sku10243_dashboard';
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.markah) document.getElementById('kpi-markah').textContent = data.markah;
+      if (data.view) switchView(data.view);
+    } else {
+      saveCurrentData();
+    }
+  } catch(e) {}
+  // Restore view
+  try {
+    const v = localStorage.getItem('sku10243_view');
+    if (v) switchView(v);
+    else switchView('exec');
+  } catch(e) { switchView('exec'); }
+}
+
+function saveCurrentData() {
+  try {
+    const data = {
+      markah: document.getElementById('kpi-markah').textContent,
+      savedAt: new Date().toISOString(),
+      view: currentView
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function resetData() {
+  try {
+    localStorage.removeItem(LS_KEY);
+    localStorage.removeItem('sku10243_view');
+    localStorage.removeItem('sku10243_ops');
+    localStorage.removeItem('sku10243_schedule');
+  } catch(e) {}
+  document.getElementById('kpi-markah').textContent = '47.45';
+  switchView('exec');
+  const banner = document.getElementById('ls-banner');
+  banner.style.background = '#fff7ed';
+  banner.style.borderColor = '#fed7aa';
+  banner.querySelector('span').textContent = 'ðŸ”„ Data telah ditetapkan semula kepada demo asal.';
+  setTimeout(() => {
+    banner.style.background = '';
+    banner.style.borderColor = '';
+    banner.querySelector('span').textContent = 'âœ… Data dashboard disimpan secara automatik dalam peranti anda.';
+  }, 3000);
+}
+
+/* â”€â”€ Operations Form Save â”€â”€ */
+function saveOpsData() {
+  const data = {
+    nama:   document.getElementById('f-nama').value,
+    matrik: document.getElementById('f-matrik').value,
+    pent:   document.getElementById('f-pent').value,
+    markah: document.getElementById('f-markah').value,
+    nota:   document.getElementById('f-nota').value,
+    savedAt: new Date().toISOString()
+  };
+  try { localStorage.setItem('sku10243_ops', JSON.stringify(data)); } catch(e) {}
+  const msg = document.getElementById('ops-save-msg');
+  msg.style.display = 'inline';
+  setTimeout(() => msg.style.display = 'none', 2500);
+}
+
+function saveSchedule() {
+  const data = {
+    tarikh: document.getElementById('f-tarikh').value,
+    masa:   document.getElementById('f-masa').value,
+    jenis:  document.getElementById('f-jenis').value,
+    topik:  document.getElementById('f-topik').value,
+    savedAt: new Date().toISOString()
+  };
+  try { localStorage.setItem('sku10243_schedule', JSON.stringify(data)); } catch(e) {}
+  const msg = document.getElementById('sched-save-msg');
+  msg.style.display = 'inline';
+  setTimeout(() => msg.style.display = 'none', 2500);
+}
+
+/* â”€â”€ Export PDF â”€â”€ */
+function exportPDF() {
+  document.getElementById('print-date').textContent = new Date().toLocaleDateString('ms-MY', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('sig-box').style.display = 'block';
+  window.print();
+  setTimeout(() => {
+    document.getElementById('sig-box').style.display = 'none';
+  }, 1000);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SMART AI â€” ALL 12 FEATURE FUNCTIONS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* helper: show output with typewriter effect */
+function aiShow(id, html, delay) {
+  const el = document.getElementById(id);
+  el.classList.remove('show');
+  el.innerHTML = '<div class="ai-thinking"><span class="ai-spinner"></span> AI sedang menganalisis...</div>';
+  el.classList.add('show');
+  setTimeout(() => { el.innerHTML = html; }, delay || 900);
+}
+
+/* â”€â”€â”€ AI FUNCTIONS â”€â”€â”€ */
+
+function runGradePredictor() {
+  aiShow('out-grade-pred',
+    `<b>ðŸŽ¯ Ramalan Gred Akhir SKU10243</b>\n\n` +
+    `Markah PB semasa: <b>47.45 / 75 (63.3%)</b>\n` +
+    `Baki peperiksaan akhir: <b>25 markah</b>\n\n` +
+    `ðŸ“Š <b>Senario Ramalan:</b>\n` +
+    `â€¢ Jika dapat 10/25 (40%) â†’ Jumlah: 57.45 â†’ Gred <b>D (57%)</b>\n` +
+    `â€¢ Jika dapat 17.55/25 (70%) â†’ Jumlah: 65.00 â†’ Gred <b>B (65%)</b>\n` +
+    `â€¢ Jika dapat 22/25 (88%) â†’ Jumlah: 69.45 â†’ Gred <b>A (69%)</b>\n\n` +
+    `ðŸ¤– <b>AI Cadangan:</b> Berdasarkan trend prestasi semasa, gred realistik ialah <b>B</b> jika pelajar menyasarkan 17â€“18/25 dalam peperiksaan akhir.\n\n` +
+    `âš ï¸ CLO 1 (40%) adalah risiko utama â€” fokus ulang kaji di sini.`
+  );
+}
+
+function runAtRisk() {
+  aiShow('out-at-risk',
+    `<b>âš ï¸ Laporan AI At-Risk Detector</b>\n\n` +
+    `<b style="color:#dc2626">ðŸ”´ FLAGGED: CLO 1 â€” Teori & Pengetahuan</b>\n` +
+    `â†’ Markah Ujian Teori 1: 3.00/7.50 (40%) â€” Di bawah ambang 50%\n` +
+    `â†’ Risiko gagal CLO 1: <b>TINGGI</b>\n\n` +
+    `<b style="color:#f59e0b">ðŸŸ¡ PANTAU: CLO 3 â€” Etika & Sikap</b>\n` +
+    `â†’ Status kehadiran: Aktif tetapi dalam pemantauan\n` +
+    `â†’ Risiko: <b>SEDERHANA</b>\n\n` +
+    `<b style="color:#166534">ðŸŸ¢ SELAMAT: CLO 2 â€” Kemahiran Praktikal</b>\n` +
+    `â†’ Markah: 21.70/30 (76%) â€” Melebihi ambang selamat\n\n` +
+    `ðŸ¤– <b>Tindakan Disyorkan:</b>\n` +
+    `1. Jadual klinik bimbingan segera untuk CLO 1\n` +
+    `2. Hantar WhatsApp Alert kepada pelajar\n` +
+    `3. Beri latihan tambahan soalan Teori`
+  );
+}
+
+function runPerfAnalyser() {
+  aiShow('out-perf',
+    `<b>ðŸ“Š Laporan Analisis Prestasi Komprehensif</b>\n\n` +
+    `<b>Komponen Terkuat:</b>\n` +
+    `âœ… Kuiz 1 â†’ 6.75/7.50 (90%) â€” Cemerlang\n` +
+    `âœ… Tugasan Kumpulan â†’ 15.20/20 (76%) â€” Baik\n\n` +
+    `<b>Komponen Memerlukan Perhatian:</b>\n` +
+    `âš ï¸ Ujian Teori 1 â†’ 3.00/7.50 (40%) â€” Kritikal\n` +
+    `âš ï¸ Pembentangan â†’ 6.50/10 (65%) â€” Perlu tingkat\n\n` +
+    `<b>Trend Prestasi:</b>\n` +
+    `ðŸ“ˆ Kerja amali > kerja teori\n` +
+    `ðŸ“‰ Kemahiran penulisan & persembahan idea perlu dibangunkan\n\n` +
+    `<b>Indeks Konsistensi AI:</b> 0.71/1.00 (Sederhana Konsisten)\n\n` +
+    `ðŸ¤– <b>Strategi:</b> Kombinasikan kekuatan amali dengan ulang kaji teori intensif untuk capai keseimbangan CLO yang optimum.`
+  );
+}
+
+function runGapFinder() {
+  aiShow('out-gap',
+    `<b>ðŸ” Laporan AI Knowledge Gap</b>\n\n` +
+    `<b>Jurang 1 â€” KRITIKAL:</b> Kaedah Memasak (Teori)\n` +
+    `â†’ Markah Ujian Teori 40% menunjukkan kelemahan dalam terminologi Moist & Dry Heat\n` +
+    `â†’ Modul berkaitan: Modul 3\n\n` +
+    `<b>Jurang 2 â€” SEDERHANA:</b> Teknik Pembentangan\n` +
+    `â†’ Markah pembentangan 65% â€” perlu tingkatkan struktur dan keyakinan diri\n\n` +
+    `<b>Jurang 3 â€” MINOR:</b> Food Science Asas\n` +
+    `â†’ Konsep Maillard reaction, emulsifikasi belum dikuasai sepenuhnya\n\n` +
+    `<b>Kawasan Kekuatan (tiada jurang):</b>\n` +
+    `âœ… Kemahiran pisau & potongan\n` +
+    `âœ… Kerjasama kumpulan\n` +
+    `âœ… Hafalan Mother Sauces asas\n\n` +
+    `ðŸ¤– <b>Pelan Pemulihan:</b> Dedikasikan 60% masa ulang kaji untuk Modul 3 (Kaedah Memasak) dan 25% untuk kemahiran pembentangan.`
+  );
+}
+
+/* â”€â”€â”€ AI GENERATORS â”€â”€â”€ */
+
+const EXAM_QUESTIONS = {
+  mother: `ðŸ“ <b>SOALAN PEPERIKSAAN â€” Mother Sauces (Modul 4)</b>\n\n` +
+    `1. Nyatakan 5 Mother Sauces dan bahan asas setiap satunya. (10 markah)\n` +
+    `2. Bezakan antara BÃ©chamel Sauce dan VeloutÃ© Sauce dari segi bahan dan kegunaan. (6 markah)\n` +
+    `3. Apakah yang dimaksudkan dengan 'Roux'? Huraikan 3 jenis Roux. (6 markah)\n` +
+    `4. Terangkan proses membuat Hollandaise Sauce. Mengapa ia mudah rosak? (8 markah)\n` +
+    `5. Berikan 2 contoh hidangan yang menggunakan BÃ©chamel Sauce. (4 markah)\n\n` +
+    `<i>*Soalan dijana berdasarkan topik Modul 4 SKU10243</i>`,
+  hygiene: `ðŸ“ <b>SOALAN PEPERIKSAAN â€” Food Hygiene & HACCP (Modul 1)</b>\n\n` +
+    `1. Huraikan 7 prinsip HACCP. (14 markah)\n` +
+    `2. Apakah perbezaan antara 'food safety' dan 'food hygiene'? (4 markah)\n` +
+    `3. Jelaskan konsep 'Danger Zone' dalam penyimpanan makanan. (6 markah)\n` +
+    `4. Senaraikan 4 kaedah mencegah cross-contamination di dapur. (4 markah)\n` +
+    `5. Terangkan prosedur cuci tangan yang betul mengikut standard dapur. (6 markah)\n\n` +
+    `<i>*Soalan dijana berdasarkan topik Modul 1 SKU10243</i>`,
+  knife: `ðŸ“ <b>SOALAN PEPERIKSAAN â€” Knife Skills (Modul 2)</b>\n\n` +
+    `1. Namakan 5 jenis pisau dapur dan fungsi masing-masing. (10 markah)\n` +
+    `2. Terangkan teknik potongan Julienne dan Brunoise. Apakah perbezaan saiznya? (6 markah)\n` +
+    `3. Huraikan cara memegang pisau yang betul (grip) untuk keselamatan. (4 markah)\n` +
+    `4. Apakah teknik potongan yang sesuai untuk membuat sup? Berikan sebab. (4 markah)\n` +
+    `5. Terangkan prosedur penyimpanan pisau yang selamat. (4 markah)\n\n` +
+    `<i>*Soalan dijana berdasarkan topik Modul 2 SKU10243</i>`,
+  cooking: `ðŸ“ <b>SOALAN PEPERIKSAAN â€” Cooking Methods (Modul 3)</b>\n\n` +
+    `1. Bezakan antara Moist Heat Methods dan Dry Heat Methods. Beri 3 contoh setiap satu. (12 markah)\n` +
+    `2. Pada suhu berapakah Poaching dijalankan? Mengapa suhu ini dipilih? (4 markah)\n` +
+    `3. Apakah Maillard Reaction? Kaedah memasak manakah yang menghasilkan tindak balas ini? (6 markah)\n` +
+    `4. Terangkan perbezaan antara Simmering dan Boiling. (4 markah)\n` +
+    `5. Berikan contoh makanan yang sesuai untuk Roasting dan jelaskan sebabnya. (4 markah)\n\n` +
+    `<i>*Soalan dijana berdasarkan topik Modul 3 SKU10243</i>`
+};
+
+function runExamGen() {
+  const t = document.getElementById('gen-topic').value;
+  aiShow('out-exam-gen', EXAM_QUESTIONS[t], 800);
+}
+
+const NOTES_CONTENT = {
+  bechamel: `ðŸ“š <b>NOTA RINGKAS â€” BÃ©chamel Sauce</b>\n\n` +
+    `âœ¦ Kategori: White Sauce / Mother Sauce #1\n` +
+    `âœ¦ Bahan Asas: Susu + Roux Putih (tepung + mentega)\n` +
+    `âœ¦ Nisbah: 2 cawan susu : 2 sudu besar tepung : 2 sudu besar mentega\n\n` +
+    `ðŸ“Œ Langkah Utama:\n` +
+    `1. Masak mentega + tepung (roux) selama 2 minit â€” jangan keperangan\n` +
+    `2. Tambah susu sejuk sedikit demi sedikit sambil kacau\n` +
+    `3. Masak hingga pekat â€” musim dengan garam, lada, nutmeg\n\n` +
+    `ðŸ½ï¸ Kegunaan: Lasagna, Moussaka, Croque Monsieur, Mac & Cheese\n` +
+    `âš ï¸ Kesilapan lazim: Susu panas â†’ berketul; Roux terlalu lama â†’ rasa pahit`,
+  moist: `ðŸ“š <b>NOTA RINGKAS â€” Moist Heat Methods</b>\n\n` +
+    `âœ¦ Definisi: Kaedah memasak menggunakan cecair atau wap sebagai media haba\n\n` +
+    `ðŸ“Œ Kaedah & Suhu:\n` +
+    `â€¢ Poaching: 71â€“82Â°C (gelembung halus) â†’ telur, ikan, buah\n` +
+    `â€¢ Simmering: 85â€“96Â°C (gelembung kecil) â†’ stok, sup, braised meat\n` +
+    `â€¢ Boiling: 100Â°C (gelembung kuat) â†’ pasta, sayur, telur rebus\n` +
+    `â€¢ Steaming: >100Â°C (wap) â†’ dim sum, ikan, sayuran\n` +
+    `â€¢ Braising: Rendah & perlahan dalam cecair â†’ daging keras\n\n` +
+    `âœ… Kelebihan: Mengekalkan kelembapan, sesuai protein fragile\n` +
+    `âš ï¸ Ingat: Suhu Poaching < Simmering < Boiling`,
+  haccp: `ðŸ“š <b>NOTA RINGKAS â€” 7 Prinsip HACCP</b>\n\n` +
+    `âœ¦ HACCP = Hazard Analysis Critical Control Points\n\n` +
+    `ðŸ“Œ 7 Prinsip (WAJIB HAFAL):\n` +
+    `1ï¸âƒ£ Conduct Hazard Analysis â€” kenal pasti bahaya biologi/kimia/fizikal\n` +
+    `2ï¸âƒ£ Identify Critical Control Points (CCP) â€” titik kawalan kritikal\n` +
+    `3ï¸âƒ£ Establish Critical Limits â€” had suhu, masa, pH\n` +
+    `4ï¸âƒ£ Establish Monitoring Procedures â€” prosedur pemantauan\n` +
+    `5ï¸âƒ£ Establish Corrective Actions â€” tindakan pembetulan\n` +
+    `6ï¸âƒ£ Establish Verification Procedures â€” pengesahan sistem\n` +
+    `7ï¸âƒ£ Establish Record-keeping â€” dokumentasi rekod\n\n` +
+    `âœ… Tip Peperiksaan: Hafal nombor + kata kunci setiap prinsip`,
+  stocks: `ðŸ“š <b>NOTA RINGKAS â€” Stocks & Bases</b>\n\n` +
+    `âœ¦ Definisi: Cecair perisa yang dihasilkan daripada perebusan tulang/sayuran\n\n` +
+    `ðŸ“Œ 4 Jenis Stok Utama:\n` +
+    `â€¢ White Stock (Fond Blanc): Tulang ayam/veal + sayuran; tidak dibakar\n` +
+    `â€¢ Brown Stock (Fond Brun): Tulang + sayuran dibakar dahulu â†’ warna gelap\n` +
+    `â€¢ Fish Stock (Fumet): Tulang ikan + wine putih; masak 20â€“30 min sahaja\n` +
+    `â€¢ Vegetable Stock: Sayuran sahaja â€” tiada tulang\n\n` +
+    `ðŸ“Œ Mirepoix Asas: 2 bawang : 1 lobak : 1 saderi\n\n` +
+    `âš ï¸ Jangan boil stock kuat â€” akan jadi keruh; simmer sahaja!`
+};
+
+function runNotesGen() {
+  const t = document.getElementById('gen-notes-topic').value;
+  aiShow('out-notes-gen', NOTES_CONTENT[t], 700);
+}
+
+const FEEDBACK_LETTERS = {
+  warn: `ðŸ’Œ <b>SURAT MAKLUM BALAS â€” AMARAN PRESTASI</b>\n\n` +
+    `Kepada: Pelajar SKU10243\n` +
+    `Dari: Pensyarah SKU10243\n` +
+    `Tarikh: November 2025\n\n` +
+    `â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n` +
+    `PERKARA: AMARAN PRESTASI AKADEMIK\n` +
+    `â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n\n` +
+    `Dengan hormatnya perkara di atas dirujuk.\n\n` +
+    `Adalah dimaklumkan bahawa prestasi anda dalam komponen Ujian Teori 1 berada pada tahap yang membimbangkan iaitu 3.00/7.50 (40%). Markah ini berada di bawah tahap minimum yang diperlukan untuk menguasai CLO 1.\n\n` +
+    `Sehubungan itu, anda DIKEHENDAKI untuk:\n` +
+    `1. Mendapatkan bimbingan pensyarah dalam masa 7 hari\n` +
+    `2. Menyiapkan latihan tambahan yang ditetapkan\n` +
+    `3. Hadir ke sesi klinik akademik pada 15 November 2025\n\n` +
+    `Sekian, terima kasih.\n\n` +
+    `Pensyarah SKU10243\nSijil Kulinari, Sesi 2025/2026`,
+  good: `ðŸ’Œ <b>SURAT MAKLUM BALAS â€” PUJIAN PRESTASI</b>\n\n` +
+    `Kepada: Pelajar SKU10243\n` +
+    `Dari: Pensyarah SKU10243\n` +
+    `Tarikh: November 2025\n\n` +
+    `â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n` +
+    `PERKARA: TAHNIAH ATAS PRESTASI CEMERLANG\n` +
+    `â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n\n` +
+    `Dengan sukacitanya saya ingin merakamkan setinggi-tinggi tahniah kepada anda atas prestasi cemerlang dalam Tugasan Kumpulan SKU10243 dengan markah 15.20/20.00 (76%).\n\n` +
+    `Kerjasama pasukan yang ditunjukkan adalah amat membanggakan dan mencerminkan nilai-nilai profesionalisme dalam industri kulinari.\n\n` +
+    `Teruskan semangat dan dedikasi ini ke Peperiksaan Akhir. Saya yakin anda mampu mencapai gred yang lebih tinggi!\n\n` +
+    `Tahniah sekali lagi.\n\nPensyarah SKU10243`,
+  final: `ðŸ’Œ <b>SURAT GALAKAN â€” PEPERIKSAAN AKHIR</b>\n\n` +
+    `Kepada: Semua Pelajar SKU10243\n` +
+    `Dari: Pensyarah SKU10243\n` +
+    `Tarikh: November 2025\n\n` +
+    `â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n` +
+    `PERKARA: PERSEDIAAN PEPERIKSAAN AKHIR 25 NOV 2026\n` +
+    `â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n\n` +
+    `Assalamualaikum dan Salam Sejahtera,\n\n` +
+    `Peperiksaan Akhir SKU10243 bakal menjelang tiba. Anda telah menunjukkan komitmen yang baik sepanjang semester ini.\n\n` +
+    `Fokus ulang kaji anda:\n` +
+    `â€¢ 5 Mother Sauces â€” WAJIB hafal\n` +
+    `â€¢ Moist & Dry Heat Methods â€” terminologi tepat\n` +
+    `â€¢ HACCP 7 Prinsip â€” nombor dan kata kunci\n\n` +
+    `Semoga berjaya! In sha Allah, anda mampu!`
+};
+
+function runFeedbackGen() {
+  const t = document.getElementById('gen-fb-type').value;
+  aiShow('out-fb-gen', FEEDBACK_LETTERS[t], 800);
+}
+
+function runScheduleGen() {
+  aiShow('out-sched-gen',
+    `ðŸ“… <b>JADUAL ULANG KAJI 2 MINGGU â€” SKU10243</b>\n\n` +
+    `<table class="sched-table"><thead><tr><th>Hari</th><th>Tarikh</th><th>Topik</th><th>Durasi</th><th>Fokus CLO</th></tr></thead><tbody>` +
+    `<tr><td>Isnin</td><td>11 Nov</td><td>ðŸ”´ Kaedah Memasak (Modul 3)</td><td>2 jam</td><td>CLO 1</td></tr>` +
+    `<tr><td>Selasa</td><td>12 Nov</td><td>ðŸ”´ Ujian latih Kaedah Memasak</td><td>1.5 jam</td><td>CLO 1</td></tr>` +
+    `<tr><td>Rabu</td><td>13 Nov</td><td>ðŸŸ¡ 5 Mother Sauces (Modul 4)</td><td>2 jam</td><td>CLO 1</td></tr>` +
+    `<tr><td>Khamis</td><td>14 Nov</td><td>ðŸŸ¡ Roux & Stocks</td><td>1.5 jam</td><td>CLO 1</td></tr>` +
+    `<tr><td>Jumaat</td><td>15 Nov</td><td>ðŸ”µ Sesi Klinik Pensyarah</td><td>2 jam</td><td>Semua CLO</td></tr>` +
+    `<tr><td>Sabtu</td><td>16 Nov</td><td>ðŸŸ¢ Knife Skills (Modul 2)</td><td>1 jam</td><td>CLO 2</td></tr>` +
+    `<tr><td>Ahad</td><td>17 Nov</td><td>â™»ï¸ Ulang kaji & rehat</td><td>1 jam</td><td>â€”</td></tr>` +
+    `<tr><td>Isnin</td><td>18 Nov</td><td>ðŸ”´ HACCP & Food Hygiene (Modul 1)</td><td>2 jam</td><td>CLO 3</td></tr>` +
+    `<tr><td>Selasa</td><td>19 Nov</td><td>ðŸ”´ Soalan peperiksaan lepas</td><td>2 jam</td><td>CLO 1</td></tr>` +
+    `<tr><td>Rabu</td><td>20 Nov</td><td>ðŸŸ¡ Mock exam penuh</td><td>3 jam</td><td>Semua</td></tr>` +
+    `<tr><td>Khamis</td><td>21 Nov</td><td>ðŸŸ¢ Semak & betulkan kesilapan</td><td>2 jam</td><td>Semua</td></tr>` +
+    `<tr><td>Jumaat</td><td>22 Nov</td><td>ðŸ“– Ulang kaji akhir ringkas</td><td>1 jam</td><td>Semua</td></tr>` +
+    `<tr><td>Sabtu</td><td>23 Nov</td><td>ðŸ˜´ Rehat & prep mental</td><td>â€”</td><td>â€”</td></tr>` +
+    `<tr><td>Ahad</td><td>24 Nov</td><td>ðŸ“ Baca nota ringkas sahaja</td><td>30 min</td><td>CLO 1</td></tr>` +
+    `<tr><td><b>Isnin</b></td><td><b>25 Nov</b></td><td><b>ðŸŽ“ PEPERIKSAAN AKHIR</b></td><td>â€”</td><td><b>SEMUA</b></td></tr>` +
+    `</tbody></table>`, 1000
+  );
+}
+
+/* â”€â”€â”€ AI SIMULATORS â”€â”€â”€ */
+
+/* SIM 1 â€” Mock Exam */
+const MOCK_QS = [
+  { q:"Apakah bahan asas untuk membuat BÃ©chamel Sauce?", opts:["Stok coklat + Roux","Susu + Roux Putih","Kuning telur + Mentega","Tomato + Mirepoix"], ans:1 },
+  { q:"Pada suhu berapakah Poaching dijalankan?", opts:["100Â°C","50â€“60Â°C","71â€“82Â°C","85â€“96Â°C"], ans:2 },
+  { q:"Apakah singkatan HACCP?", opts:["Hazard Analysis Critical Control Points","Heat And Cold Control Program","Hygiene And Cleanliness Control Protocol","Hazard Avoiding Critical Culinary Practice"], ans:0 },
+  { q:"Teknik potongan manakah yang menghasilkan kepingan seperti batang korek api (2mm Ã— 6cm)?", opts:["Brunoise","Chiffonade","Julienne","Dice"], ans:2 },
+  { q:"Sos manakah dalam senarai berikut BUKAN Mother Sauce?", opts:["BÃ©chamel","VeloutÃ©","Hollandaise","Pesto"], ans:3 },
+  { q:"Mirepoix terdiri daripada kombinasi sayuran berikut:", opts:["Bawang + Saderi + Lobak merah","Tomato + Bawang + Halia","Kentang + Wortel + Lobak","Bawang + Serai + Cili"], ans:0 },
+  { q:"Kaedah memasak manakah yang menggunakan haba kering tanpa cecair?", opts:["Poaching","Steaming","Roasting","Braising"], ans:2 },
+  { q:"Roux Blonde bermaksud roux yang dimasak sehingga:", opts:["Berwarna putih","Berwarna keemasan/madu","Berwarna coklat pekat","Menjadi pepejal"], ans:1 },
+];
+let mockIdx = 0, mockScore = 0, mockAnswered = false;
+
+function startMockExam() {
+  mockIdx = 0; mockScore = 0; mockAnswered = false;
+  document.getElementById('mock-score-fill').style.width = '0%';
+  document.getElementById('mock-score-txt').textContent = `Soalan 1 / ${MOCK_QS.length}`;
+  renderMockQ();
+}
+
+function renderMockQ() {
+  const q = MOCK_QS[mockIdx];
+  document.getElementById('mock-q').textContent = `(${mockIdx+1}/${MOCK_QS.length}) ${q.q}`;
+  const optsEl = document.getElementById('mock-opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = `${String.fromCharCode(65+i)}. ${o}`;
+    b.onclick = () => answerMock(i);
+    optsEl.appendChild(b);
+  });
+  const res = document.getElementById('mock-result');
+  res.style.display = 'none'; mockAnswered = false;
+}
+
+function answerMock(chosen) {
+  if (mockAnswered) return;
+  mockAnswered = true;
+  const q = MOCK_QS[mockIdx];
+  const opts = document.querySelectorAll('#mock-opts .quiz-opt');
+  opts.forEach((b, i) => {
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === chosen) b.classList.add('wrong');
+    b.onclick = null;
+  });
+  const res = document.getElementById('mock-result');
+  if (chosen === q.ans) {
+    mockScore++;
+    res.textContent = 'âœ… Betul! Syabas!';
+    res.style.cssText = 'display:block;background:#dcfce7;color:#166534;border-radius:7px;padding:8px 12px;';
+  } else {
+    res.textContent = `âŒ Salah. Jawapan: ${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}`;
+    res.style.cssText = 'display:block;background:#fee2e2;color:#991b1b;border-radius:7px;padding:8px 12px;';
+  }
+  document.getElementById('mock-score-fill').style.width = `${(mockScore/MOCK_QS.length)*100}%`;
+  mockIdx++;
+  if (mockIdx < MOCK_QS.length) {
+    setTimeout(() => { document.getElementById('mock-score-txt').textContent = `Soalan ${mockIdx+1} / ${MOCK_QS.length}`; renderMockQ(); }, 1400);
+  } else {
+    setTimeout(() => {
+      document.getElementById('mock-q').textContent = `ðŸŽ“ Peperiksaan Selesai! Markah: ${mockScore}/${MOCK_QS.length} (${Math.round(mockScore/MOCK_QS.length*100)}%)`;
+      document.getElementById('mock-opts').innerHTML = '';
+      document.getElementById('mock-result').style.display = 'none';
+      document.getElementById('mock-score-txt').textContent = `âœ… Selesai â€” Skor: ${mockScore}/${MOCK_QS.length}`;
+    }, 1400);
+  }
+}
+
+/* SIM 2 â€” Mother Sauce Quiz */
+const SAUCE_QS = [
+  { q:"Sos manakah dibuat daripada kuning telur + mentega cair?", opts:["BÃ©chamel","VeloutÃ©","Hollandaise","Espagnole"], ans:2 },
+  { q:"VeloutÃ© menggunakan jenis stok yang manakah?", opts:["Stok coklat","Stok putih","Susu","Tomato"], ans:1 },
+  { q:"Espagnole sauce berwarna gelap kerana menggunakan:", opts:["Stok putih + susu","Stok coklat + mirepoix dibakar","Tomato segar","Cuka putih + telur"], ans:1 },
+  { q:"Mother Sauce yang mengandungi tomato sebagai bahan utama ialah:", opts:["VeloutÃ©","BÃ©chamel","Tomato Sauce","Hollandaise"], ans:2 },
+  { q:"BÃ©chamel dipekatkan menggunakan:", opts:["Cornflour","Roux Putih","Kuning telur","Gelatin"], ans:1 },
+];
+let sauceIdx = 0, sauceScore = 0, sauceAnswered = false;
+
+function startSauceQuiz() {
+  sauceIdx = 0; sauceScore = 0; sauceAnswered = false;
+  document.getElementById('sauce-score-txt').textContent = `Soalan 1 / ${SAUCE_QS.length}`;
+  renderSauceQ();
+}
+
+function renderSauceQ() {
+  const q = SAUCE_QS[sauceIdx];
+  document.getElementById('sauce-q').textContent = `(${sauceIdx+1}/${SAUCE_QS.length}) ${q.q}`;
+  const optsEl = document.getElementById('sauce-opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = `${String.fromCharCode(65+i)}. ${o}`;
+    b.onclick = () => answerSauce(i);
+    optsEl.appendChild(b);
+  });
+  document.getElementById('sauce-result').style.display = 'none'; sauceAnswered = false;
+}
+
+function answerSauce(chosen) {
+  if (sauceAnswered) return;
+  sauceAnswered = true;
+  const q = SAUCE_QS[sauceIdx];
+  const opts = document.querySelectorAll('#sauce-opts .quiz-opt');
+  opts.forEach((b, i) => {
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === chosen) b.classList.add('wrong');
+    b.onclick = null;
+  });
+  const res = document.getElementById('sauce-result');
+  if (chosen === q.ans) { sauceScore++; res.textContent='âœ… Tepat!'; res.style.cssText='display:block;background:#dcfce7;color:#166534;border-radius:7px;padding:8px 12px;'; }
+  else { res.textContent=`âŒ Salah. Jawapan: ${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}`; res.style.cssText='display:block;background:#fee2e2;color:#991b1b;border-radius:7px;padding:8px 12px;'; }
+  sauceIdx++;
+  if (sauceIdx < SAUCE_QS.length) {
+    setTimeout(() => { document.getElementById('sauce-score-txt').textContent=`Soalan ${sauceIdx+1} / ${SAUCE_QS.length}`; renderSauceQ(); }, 1400);
+  } else {
+    setTimeout(() => {
+      document.getElementById('sauce-q').textContent=`ðŸ² Kuiz Selesai! Markah: ${sauceScore}/${SAUCE_QS.length} (${Math.round(sauceScore/SAUCE_QS.length*100)}%)`;
+      document.getElementById('sauce-opts').innerHTML='';
+      document.getElementById('sauce-result').style.display='none';
+      document.getElementById('sauce-score-txt').textContent=`âœ… Skor: ${sauceScore}/${SAUCE_QS.length}`;
+    }, 1400);
+  }
+}
+
+/* SIM 3 â€” Cooking Method Explorer */
+const METHODS = {
+  poaching:  { temp:'71â€“82Â°C', type:'Moist Heat', foods:'Telur, ikan, buah-buahan, ayam', tip:'Cecair tidak menggelegak â€” gelembung halus sahaja. Ideal untuk makanan lembut.', emoji:'ðŸ¥š' },
+  simmering: { temp:'85â€“96Â°C', type:'Moist Heat', foods:'Stok, sup, braised meat, kekacang', tip:'Gelembung kecil naik perlahan. Digunakan lama untuk mengekstrak rasa.', emoji:'ðŸ²' },
+  boiling:   { temp:'100Â°C',   type:'Moist Heat', foods:'Pasta, sayuran, telur rebus, nasi', tip:'Gelembung kuat. Pastikan garam dalam air untuk rasa lebih baik.', emoji:'â™¨ï¸' },
+  steaming:  { temp:'>100Â°C',  type:'Moist Heat', foods:'Dim sum, ikan, sayuran, puding', tip:'Haba wap mengekalkan nutrisi dan warna makanan lebih baik.', emoji:'ðŸ«•' },
+  sauteing:  { temp:'175â€“230Â°C',type:'Dry Heat',  foods:'Sayuran, daging kecil, mushroom', tip:'Kuali panas + sedikit minyak. Makanan dipotong kecil rata untuk masak sekata.', emoji:'ðŸ³' },
+  roasting:  { temp:'160â€“230Â°C',type:'Dry Heat',  foods:'Ayam, daging besar, akar sayuran', tip:'Haba ketuhar kering. Menghasilkan Maillard reaction â€” warna keemasan & rasa umami.', emoji:'ðŸ—' },
+  grilling:  { temp:'200â€“260Â°C',type:'Dry Heat',  foods:'Steak, seafood, sayuran, roti', tip:'Haba langsung dari bawah/atas. Grill marks menambah estetik hidangan.', emoji:'ðŸ¥©' },
+  deepfry:   { temp:'170â€“190Â°C',type:'Dry Heat',  foods:'Keropok, ayam goreng, donut, kentang', tip:'Rendamkan dalam minyak penuh. Suhu minyak mesti stabil untuk hasil rangup.', emoji:'ðŸŸ' },
+};
+
+function showMethod(key, el) {
+  document.querySelectorAll('.method-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const m = METHODS[key];
+  const det = document.getElementById('method-detail');
+  det.classList.add('show');
+  det.innerHTML = `<b>${m.emoji} ${key.charAt(0).toUpperCase()+key.slice(1)}</b> â€” <span style="background:#0891b2;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px">${m.type}</span>\n\n` +
+    `ðŸŒ¡ï¸ <b>Suhu:</b> ${m.temp}\n` +
+    `ðŸ½ï¸ <b>Sesuai untuk:</b> ${m.foods}\n\n` +
+    `ðŸ’¡ <b>Tip:</b> ${m.tip}`;
+}
+
+/* SIM 4 â€” Final Grade Simulator */
+function updateGradeSim() {
+  const sliders = ['kuiz','ujian','pres','group','final'];
+  const ids = ['sl-kuiz','sl-ujian','sl-pres','sl-group','sl-final'];
+  const valIds = ['sv-kuiz','sv-ujian','sv-pres','sv-group','sv-final'];
+  let total = 0;
+  ids.forEach((id, i) => {
+    const v = parseFloat(document.getElementById(id).value);
+    document.getElementById(valIds[i]).textContent = v.toFixed(2);
+    total += v;
+  });
+  const pct = (total / 70) * 100;
+  let grade, color, msg;
+  if (pct >= 90)      { grade='A+'; color='#166534'; msg='Cemerlang Tertinggi!'; }
+  else if (pct >= 80) { grade='A';  color='#166534'; msg='Cemerlang â€” Gred A'; }
+  else if (pct >= 75) { grade='A-'; color='#1d4ed8'; msg='Hampir Cemerlang â€” Gred A-'; }
+  else if (pct >= 70) { grade='B+'; color='#1d4ed8'; msg='Sangat Baik â€” Gred B+'; }
+  else if (pct >= 65) { grade='B';  color='#1d4ed8'; msg='Baik â€” Gred B'; }
+  else if (pct >= 60) { grade='B-'; color='#1d4ed8'; msg='Memuaskan â€” Gred B-'; }
+  else if (pct >= 55) { grade='C+'; color='#f59e0b'; msg='Lulus â€” Perlu tingkatkan'; }
+  else if (pct >= 50) { grade='C';  color='#f59e0b'; msg='Lulus Minimum'; }
+  else if (pct >= 45) { grade='C-'; color='#dc2626'; msg='Di ambang lulus â€” risiko!'; }
+  else                { grade='F';  color='#dc2626'; msg='Gagal â€” perlu ulang'; }
+
+  document.getElementById('sim-grade-letter').textContent = grade;
+  document.getElementById('sim-grade-letter').style.color = color;
+  document.getElementById('sim-total-pct').textContent = `${total.toFixed(2)} / 70 (${pct.toFixed(1)}%)`;
+  document.getElementById('sim-total-pct').style.color = color;
+  document.getElementById('sim-grade-msg').textContent = msg;
+  document.getElementById('sim-grade-bar').style.width = `${Math.min(pct, 100)}%`;
+  document.getElementById('sim-grade-bar').style.setProperty('--fill', color);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BOOKING SYSTEM
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const BK_KEY = 'sku10243_bookings';
+let selectedSlotType = 'wa';
+let selectedTime = '';
+let editingBookingId = null;
+
+function selectSlot(type) {
+  selectedSlotType = type;
+  document.getElementById('slot-wa').classList.toggle('slot-selected', type === 'wa');
+  document.getElementById('slot-gm').classList.toggle('slot-selected', type === 'gm');
+  document.getElementById('gm-slot-picker').style.display = type === 'gm' ? 'block' : 'none';
+  document.getElementById('form-step-label').textContent = type === 'gm' ? 'â‘¢ Isi Maklumat Tempahan' : 'â‘¡ Isi Maklumat Tempahan';
+  selectedTime = '';
+  document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+}
+
+function selectTime(el, time) {
+  selectedTime = time;
+  document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function switchBookingTab(tab) {
+  const isForm = tab === 'form';
+  document.getElementById('booking-form-panel').style.display = isForm ? 'block' : 'none';
+  document.getElementById('booking-list-panel').style.display = isForm ? 'none' : 'block';
+  document.getElementById('btab-form').style.background = isForm ? '#1d4ed8' : '#f7f8fa';
+  document.getElementById('btab-form').style.color = isForm ? '#fff' : '#57606a';
+  document.getElementById('btab-list').style.background = isForm ? '#f7f8fa' : '#1d4ed8';
+  document.getElementById('btab-list').style.color = isForm ? '#57606a' : '#fff';
+  if (!isForm) renderBookingList();
+}
+
+function buildWAMessage(booking) {
+  const typeLabel = booking.type === 'gm' ? 'Google Meet Klinik Online' : 'WhatsApp Pensyarah';
+  const timeInfo  = booking.type === 'gm' && booking.masa ? ' | Masa: ' + booking.masa : '';
+  return encodeURIComponent(
+    'ðŸ“… TEMPAHAN BIMBINGAN SKU10243\n' +
+    'â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n' +
+    'ðŸ‘¤ Nama: ' + booking.nama + '\n' +
+    'ðŸŽ“ No. Matrik: ' + booking.matrik + '\n' +
+    'ðŸ“š Topik: ' + booking.topik + '\n' +
+    'ðŸ“† Tarikh: ' + booking.tarikh + timeInfo + '\n' +
+    'ðŸ–¥ï¸ Jenis Sesi: ' + typeLabel + '\n' +
+    (booking.nota ? 'ðŸ“ Catatan: ' + booking.nota + '\n' : '') +
+    'â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n' +
+    'Terima kasih Pensyarah. Saya memerlukan bimbingan untuk topik di atas. Mohon pengesahan slot.'
+  );
+}
+
+function submitBooking() {
+  const nama   = document.getElementById('bk-nama').value.trim();
+  const matrik = document.getElementById('bk-matrik').value.trim();
+  const topik  = document.getElementById('bk-topik').value;
+  const tarikh = document.getElementById('bk-tarikh').value;
+  const nota   = document.getElementById('bk-nota').value.trim();
+  const errEl  = document.getElementById('bk-error');
+
+  const errors = [];
+  if (!nama)   errors.push('Nama penuh pelajar diperlukan');
+  if (!matrik) errors.push('No. Matrik diperlukan');
+  if (!topik)  errors.push('Sila pilih topik bimbingan');
+  if (!tarikh) errors.push('Tarikh pilihan diperlukan');
+  if (selectedSlotType === 'gm' && !selectedTime) errors.push('Sila pilih slot masa untuk Google Meet');
+
+  if (errors.length) {
+    errEl.innerHTML = 'âš ï¸ ' + errors.join('<br>âš ï¸ ');
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const booking = {
+    id: editingBookingId || Date.now().toString(),
+    type: selectedSlotType,
+    nama, matrik, topik, tarikh,
+    masa: selectedTime || '',
+    nota,
+    savedAt: new Date().toLocaleString('ms-MY')
+  };
+  saveBooking(booking);
+  editingBookingId = null;
+
+  window.open('https://wa.me/?text=' + buildWAMessage(booking), '_blank');
+
+  document.getElementById('bk-nama').value   = '';
+  document.getElementById('bk-matrik').value = '';
+  document.getElementById('bk-topik').value  = '';
+  document.getElementById('bk-tarikh').value = '';
+  document.getElementById('bk-nota').value   = '';
+  selectedTime = '';
+  document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
+  switchBookingTab('list');
+}
+
+function getBookings() {
+  try { return JSON.parse(localStorage.getItem(BK_KEY) || '[]'); } catch(e) { return []; }
+}
+function saveBooking(booking) {
+  const list = getBookings();
+  const idx = list.findIndex(b => b.id === booking.id);
+  if (idx >= 0) list[idx] = booking; else list.unshift(booking);
+  try { localStorage.setItem(BK_KEY, JSON.stringify(list)); } catch(e) {}
+}
+function deleteBooking(id) {
+  const list = getBookings().filter(b => b.id !== id);
+  try { localStorage.setItem(BK_KEY, JSON.stringify(list)); } catch(e) {}
+  renderBookingList();
+}
+function clearAllBookings() {
+  if (!confirm('Padam semua tempahan? Tindakan ini tidak boleh dibatalkan.')) return;
+  try { localStorage.removeItem(BK_KEY); } catch(e) {}
+  renderBookingList();
+}
+function editBooking(id) {
+  const booking = getBookings().find(b => b.id === id);
+  if (!booking) return;
+  editingBookingId = id;
+  document.getElementById('bk-nama').value   = booking.nama;
+  document.getElementById('bk-matrik').value = booking.matrik;
+  document.getElementById('bk-topik').value  = booking.topik;
+  document.getElementById('bk-tarikh').value = booking.tarikh;
+  document.getElementById('bk-nota').value   = booking.nota || '';
+  selectSlot(booking.type);
+  if (booking.masa) {
+    document.querySelectorAll('.time-slot-btn').forEach(btn => {
+      if (btn.textContent === booking.masa) { btn.classList.add('selected'); selectedTime = booking.masa; }
+    });
+  }
+  switchBookingTab('form');
+  document.getElementById('bk-nama').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+function resendBooking(id) {
+  const booking = getBookings().find(b => b.id === id);
+  if (!booking) return;
+  window.open('https://wa.me/?text=' + buildWAMessage(booking), '_blank');
+}
+function renderBookingList() {
+  const list   = getBookings();
+  const emptyEl = document.getElementById('bk-list-empty');
+  const listEl  = document.getElementById('bk-list-items');
+  if (!list.length) { emptyEl.style.display = 'block'; listEl.innerHTML = ''; return; }
+  emptyEl.style.display = 'none';
+  listEl.innerHTML = list.map(b => {
+    const typeLabel = b.type === 'gm' ? 'ðŸŽ¥ Google Meet' : 'ðŸ’¬ WhatsApp';
+    const typeCls   = b.type === 'gm' ? 'gm' : 'wa';
+    const masaText  = b.masa ? ' | ' + b.masa : '';
+    return '<div class="bk-item">' +
+      '<div class="bk-item-head">' +
+        '<span class="bk-item-type ' + typeCls + '">' + typeLabel + '</span>' +
+        '<span class="bk-item-date">ðŸ“† ' + b.tarikh + masaText + '</span>' +
+      '</div>' +
+      '<div class="bk-item-name">ðŸ‘¤ ' + b.nama + ' &nbsp;<span style="font-weight:400;color:#57606a;font-size:12px">(' + b.matrik + ')</span></div>' +
+      '<div class="bk-item-detail">ðŸ“š ' + b.topik + '</div>' +
+      (b.nota ? '<div class="bk-item-detail" style="margin-top:2px">ðŸ“ ' + b.nota + '</div>' : '') +
+      '<div class="bk-item-detail" style="margin-top:4px;color:#9ca3af;font-size:10px">Disimpan: ' + b.savedAt + '</div>' +
+      '<div class="bk-item-actions">' +
+        '<button class="bk-edit-btn"   onclick="editBooking(\'' + b.id + '\')">âœï¸ Edit</button>' +
+        '<button class="bk-resend-btn" onclick="resendBooking(\'' + b.id + '\')">ðŸ’¬ Hantar Semula WA</button>' +
+        '<button class="bk-del-btn"    onclick="deleteBooking(\'' + b.id + '\')">ðŸ—‘ï¸ Padam</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   ANALISIS MARKAH â€” STUDENT DATA & RENDERING
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const AN_STUDENTS = [
+  { no:'B05SKU26F001', name:'SHAZA AFRINA BINTI SHAMIR',                    k1:6.75, ut1:40, t:65, p1:15.20, k2:6.00,  pb:82.00, jumlah:52 },
+  { no:'B05SKU26F003', name:'NUR RAIHAN BINTI MOHD AZMI',                   k1:6.00, ut1:1,  t:25, p1:60.00, k2:20.00, pb:12.00, jumlah:43 },
+  { no:'B05SKU26F005', name:'NURATHIRAH NADIAH BINTI ADNAN',                k1:6.00, ut1:0,  t:40, p1:15.20, k2:0.00,  pb:20.50, jumlah:50 },
+  { no:'B05SKU26F007', name:'MUHAMMAD FAUZAN HAZIQ BIN FAUZINISAM',         k1:5.25, ut1:6,  t:70, p1:7.00,  k2:80.00, pb:68.00, jumlah:53 },
+  { no:'B05SKU26F008', name:'MOHAMAD ADIL DAN BIN AZRUL HILMI',             k1:1.50, ut1:0,  t:40, p1:64.00, k2:20.00, pb:12.00, jumlah:45 },
+  { no:'B05SKU26F010', name:'NUR QISTINA BINTI ARIF',                       k1:5.25, ut1:0,  t:30, p1:3.00,  k2:0.00,  pb:60.00, jumlah:40 },
+  { no:'B05SKU26F011', name:'MUHAMMAD IMAN FIRAS BIN TAJUL SHAHRIL',        k1:6.00, ut1:4,  t:85, p1:8.50,  k2:50.00, pb:68.00, jumlah:53 },
+  { no:'B05SKU26F012', name:'ANISH A/L MAGESWARAN',                         k1:6.00, ut1:65, t:65, p1:15.20, k2:5.25,  pb:76.00, jumlah:53 },
+  { no:'B05SKU26F015', name:'MUHAMMAD ASHRAF BIN MOHD ROBBI',               k1:3.75, ut1:3,  t:20, p1:2.00,  k2:40.00, pb:68.00, jumlah:43 },
+  { no:'B05SKU26F021', name:"NUR NAJLAA HAIFA BINTI NOR'AZMI",              k1:6.75, ut1:3,  t:20, p1:0.00,  k2:40.00, pb:68.00, jumlah:50 },
+  { no:'B05SKU26F022', name:'MEENAMBIGAI A/P SIVAKUMAR',                    k1:5.25, ut1:2,  t:30, p1:0.00,  k2:30.00, pb:60.00, jumlah:43 },
+  { no:'B05SKU26F024', name:'NUR MAISARAH BINTI MOHAMMED SAMRI',            k1:7.50, ut1:4,  t:75, p1:7.50,  k2:20.00, pb:80.00, jumlah:55 },
+  { no:'B05SKU26F026', name:'NUR QISTINA QASEH BINTI MOHD AZHAR',           k1:6.75, ut1:85, t:84, p1:16.80, k2:4.50,  pb:80.00, jumlah:57 },
+  { no:'B05SKU26F028', name:'NURQISTINA DANIA BINTI NOR AMINI',             k1:6.00, ut1:5,  t:65, p1:3.00,  k2:40.00, pb:69.00, jumlah:48 },
+  { no:'B05SKU26F029', name:'JEGATHESAN A/L JAYABALAN',                     k1:6.75, ut1:4,  t:30, p1:3.00,  k2:50.00, pb:69.00, jumlah:46 },
+  { no:'B05SKU26F030', name:'SHARVESH A/L BATUMALAI',                       k1:4.50, ut1:3,  t:20, p1:0.00,  k2:35.00, pb:62.00, jumlah:49 },
+  { no:'B05SKU26F035', name:'NUR DANIA SYAFIKAH BINTI ROSMIZAN',            k1:6.00, ut1:4,  t:55, p1:5.50,  k2:50.00, pb:80.00, jumlah:51 },
+  { no:'B05SKU26F036', name:'NUR DAMIA QISTINA BINTI HASRIN',               k1:6.75, ut1:2,  t:60, p1:6.00,  k2:30.00, pb:72.00, jumlah:49 },
+  { no:'B05SKU26F037', name:'SYAWAL ABDUL GHANI BIN MOHD SHAHUBAR BATHUSHA',k1:6.00, ut1:0,  t:45, p1:0.00,  k2:20.00, pb:76.00, jumlah:50 },
+  { no:'B05SKU26F038', name:'YOGES A/L SUNDARAM',                           k1:3.75, ut1:1,  t:20, p1:2.00,  k2:10.00, pb:76.00, jumlah:41 },
+  { no:'B05SKU26F040', name:'ASMEEN SYAHIR BIN ASRIN',                      k1:6.75, ut1:5,  t:45, p1:0.00,  k2:20.00, pb:76.00, jumlah:48 },
+];
+
+function anRisk(s) {
+  if (s.jumlah < 42) return 'high';
+  if (s.jumlah < 50) return 'med';
+  return 'low';
+}
+function anPillRisk(r) {
+  if (r==='high') return '<span class="an-pill an-pill-red">ðŸ”´ Risiko Tinggi</span>';
+  if (r==='med')  return '<span class="an-pill an-pill-amber">ðŸŸ¡ Perlu Pantau</span>';
+  return '<span class="an-pill an-pill-green">ðŸŸ¢ Selamat</span>';
+}
+function anWeak(s) {
+  const w = [];
+  if (s.ut1 < 50) w.push('Ujian Teori (' + s.ut1 + '%)');
+  if (s.t   < 50) w.push('Tugasan (' + s.t + '%)');
+  if ((s.k1/7.5)*100 < 50) w.push('Kuiz 1 (' + ((s.k1/7.5)*100).toFixed(0) + '%)');
+  return w;
+}
+
+let anInited = false;
+function anInitAnalisis() {
+  if (anInited) return;
+  anInited = true;
+
+  /* KPIs */
+  const failCount = AN_STUDENTS.filter(s=>s.jumlah<50).length;
+  const highCount = AN_STUDENTS.filter(s=>anRisk(s)==='high').length;
+  const passCount = AN_STUDENTS.filter(s=>s.jumlah>=50).length;
+  const avgPB     = AN_STUDENTS.reduce((a,s)=>a+s.pb,0)/AN_STUDENTS.length;
+  const clo1Weak  = AN_STUDENTS.filter(s=>s.ut1<50).length;
+  document.getElementById('an-kpi-f').textContent    = failCount;
+  document.getElementById('an-kpi-risk').textContent = highCount;
+  document.getElementById('an-kpi-pass').textContent = passCount;
+  document.getElementById('an-kpi-avg').textContent  = avgPB.toFixed(1)+'%';
+  document.getElementById('an-kpi-clo1').textContent = clo1Weak;
+
+  /* Footer totals */
+  const passPB = AN_STUDENTS.filter(s=>s.pb>=50).length;
+  document.getElementById('an-f-pb').textContent      = passPB;
+  document.getElementById('an-f-pb-pct').textContent  = Math.round(passPB/AN_STUDENTS.length*100)+'%';
+  document.getElementById('an-f-jum').textContent     = passCount;
+  document.getElementById('an-f-jum-pct').textContent = Math.round(passCount/AN_STUDENTS.length*100)+'%';
+
+  /* Table */
+  anRenderTable('all');
+
+  /* Risk cards */
+  const riskGrid = document.getElementById('an-risk-grid');
+  AN_STUDENTS.filter(s=>anRisk(s)!=='low').forEach(s=>{
+    const r = anRisk(s);
+    const w = anWeak(s);
+    riskGrid.innerHTML += '<div class="an-risk-card">' +
+      '<div class="an-rc-head ' + r + '">' +
+        '<div class="an-rc-avatar ' + r + '">' + s.name[0] + '</div>' +
+        '<div><div class="an-rc-name">' + s.name + '</div><div class="an-rc-no">' + s.no + '</div></div>' +
+        '<div style="margin-left:auto">' + anPillRisk(r) + '</div>' +
+      '</div>' +
+      '<div class="an-rc-body">' +
+        '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">' +
+          '<span class="an-pill an-pill-red">Jumlah: ' + s.jumlah + '</span>' +
+          '<span class="an-pill ' + (s.ut1<50?'an-pill-red':'an-pill-green') + '">UT1: ' + s.ut1 + '%</span>' +
+          '<span class="an-pill ' + (s.t<50?'an-pill-red':'an-pill-green') + '">T: ' + s.t + '%</span>' +
+        '</div>' +
+        '<div class="an-bar-row"><span class="an-bar-label">PB Terkumpul</span><div class="an-bar-track"><div class="an-bar-fill" style="--bf:' + (s.pb>=50?'#22c55e':'#ef4444') + ';width:' + Math.min(s.pb,100) + '%"></div></div><span style="font-size:10px;color:#57606a;margin-left:4px">' + s.pb + '%</span></div>' +
+        '<div class="an-bar-row"><span class="an-bar-label">Ujian Teori</span><div class="an-bar-track"><div class="an-bar-fill" style="--bf:' + (s.ut1>=50?'#22c55e':'#ef4444') + ';width:' + Math.min(s.ut1,100) + '%"></div></div><span style="font-size:10px;color:#57606a;margin-left:4px">' + s.ut1 + '%</span></div>' +
+        '<div class="an-bar-row"><span class="an-bar-label">Tugasan</span><div class="an-bar-track"><div class="an-bar-fill" style="--bf:' + (s.t>=50?'#22c55e':'#f59e0b') + ';width:' + Math.min(s.t,100) + '%"></div></div><span style="font-size:10px;color:#57606a;margin-left:4px">' + s.t + '%</span></div>' +
+        (w.length ? '<div style="margin-top:7px;font-size:11px;color:#dc2626"><b>âš ï¸ Lemah:</b> ' + w.join(', ') + '</div>' : '') +
+      '</div></div>';
+  });
+
+  /* Feedback */
+  const fbSec = document.getElementById('an-feedback-section');
+  AN_STUDENTS.filter(s=>anRisk(s)!=='low').forEach(s=>{
+    const r = anRisk(s);
+    const w = anWeak(s);
+    const statusStr = r==='high' ? 'AMARAN PRESTASI KRITIKAL' : 'NOTIS PEMANTAUAN PRESTASI';
+    const intro = r==='high'
+      ? 'Adalah dengan hormatnya dimaklumkan bahawa prestasi anda dalam SKU10243 berada pada tahap KRITIKAL dan memerlukan perhatian segera.'
+      : 'Adalah dimaklumkan bahawa prestasi anda dalam SKU10243 memerlukan peningkatan segera.';
+    const weakStr = w.length ? 'Komponen lemah:\n' + w.map(x=>'  â€¢ '+x).join('\n') : '';
+    const actions = r==='high'
+      ? 'Tindakan DIWAJIBKAN:\n  1. Hadir sesi bimbingan dalam 3 hari bekerja\n  2. Selesaikan tugasan tertunggak\n  3. Ulang kaji Kaedah Memasak, Stok & Mother Sauces\n  4. Sasarkan min. 20/25 dalam Peperiksaan Akhir'
+      : 'Tindakan disyorkan:\n  1. Hadir sesi klinik bimbingan minggu ini\n  2. Tingkatkan ulang kaji Peperiksaan Akhir\n  3. Sasarkan min. 15/25 dalam Peperiksaan Akhir';
+    const msg = statusStr + '\n\nKepada: ' + s.name + ' (' + s.no + ')\n' + 'â”€'.repeat(45) + '\n\n' + intro + '\n\nMarkah semasa:\n  â€¢ Kuiz 1: ' + s.k1.toFixed(2) + '/7.5  â€¢ Ujian Teori: ' + s.ut1 + '/100\n  â€¢ Tugasan: ' + s.t + '/100  â€¢ Pembentangan: ' + s.p1.toFixed(2) + '/20\n  â€¢ PB: ' + s.pb + '%  â€¢ Jumlah semasa: ' + s.jumlah + '\n\n' + (weakStr ? weakStr + '\n\n' : '') + actions + '\n\nSekian.\nPensyarah SKU10243 â€” Nurul Awanis Binti Muhammad';
+    const waMsg = encodeURIComponent('âš ï¸ MAKLUM BALAS SKU10243\n\nKepada: ' + s.name + '\nMarkah semasa: ' + s.jumlah + '%\nStatus: ' + (r==='high'?'KRITIKAL':'Perlu pantau') + '\n\nSila hubungi pensyarah untuk sesi bimbingan segera.\nPeperiksaan Akhir adalah peluang untuk meningkatkan markah.\n\nTerima kasih.');
+    fbSec.innerHTML += '<div class="an-fb-card">' +
+      '<div class="an-fb-head"><div><div class="an-fb-title">' + (r==='high'?'ðŸ”´':'ðŸŸ¡') + ' ' + s.name + '</div>' +
+      '<div style="font-size:10px;color:#57606a">' + s.no + ' | Jumlah: <b style="color:' + (s.jumlah<50?'#dc2626':'#1d4ed8') + '">' + s.jumlah + '</b></div></div>' +
+      anPillRisk(r) + '</div>' +
+      '<div class="an-fb-body">' + msg + '</div>' +
+      '<div class="an-fb-tip">ðŸ’¡ <b>Cadangan:</b> ' + (r==='high' ? 'Hubungi pelajar ini SEGERA (24â€“48 jam). Jadual sesi 1-on-1 dan pantau setiap minggu.' : 'Hantar peringatan. Cadang hadir klinik & sediakan latihan soalan tambahan.') + '</div>' +
+      '<div class="an-fb-actions"><a class="an-wa-btn" href="https://wa.me/?text=' + waMsg + '" target="_blank">ðŸ’¬ Hantar via WhatsApp</a></div></div>';
+  });
+
+  /* CLO Analysis */
+  const cloDiv = document.getElementById('an-clo-grid');
+  const k1Avg  = AN_STUDENTS.reduce((a,s)=>a+(s.k1/7.5)*100,0)/AN_STUDENTS.length;
+  const ut1Avg = AN_STUDENTS.reduce((a,s)=>a+s.ut1,0)/AN_STUDENTS.length;
+  const tAvg   = AN_STUDENTS.reduce((a,s)=>a+s.t,0)/AN_STUDENTS.length;
+  const p1Avg  = AN_STUDENTS.reduce((a,s)=>a+(s.p1/20)*100,0)/AN_STUDENTS.length;
+  const k2Avg  = AN_STUDENTS.reduce((a,s)=>a+(s.k2/10)*100,0)/AN_STUDENTS.length;
+  const clos = [
+    { label:'CLO 1 â€” Teori & Pengetahuan', sub:'Kuiz 1 + Ujian Teori', avg:(k1Avg+ut1Avg)/2, color:'#1d4ed8',
+      note:'Ujian Teori adalah komponen paling lemah â€” hanya 42% pelajar lulus. Perlu latihan intensif soalan teori dan teknik hafalan terminologi.' },
+    { label:'CLO 2 â€” Kemahiran Praktikal', sub:'Tugasan + Pembentangan', avg:(tAvg+p1Avg)/2, color:'#7c5cd8',
+      note:'Tugasan 42% lulus tetapi Pembentangan 100% lulus â€” kemahiran lisan baik, namun penulisan dan kerja bertulis perlu ditingkatkan.' },
+    { label:'CLO 3 â€” Etika & Amali', sub:'K2 (Amali/Kehadiran)', avg:k2Avg, color:'#22c55e',
+      note:'K2 amali/kehadiran â€” 100% lulus. Semua pelajar aktif hadir dan menunjukkan sikap yang baik dalam kelas amali.' },
+  ];
+  clos.forEach(c => {
+    const pct = Math.min(c.avg,100);
+    cloDiv.innerHTML += '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px">' +
+      '<div style="font-size:12px;font-weight:700;color:#1f2328;margin-bottom:3px">' + c.label + '</div>' +
+      '<div style="font-size:10px;color:#57606a;margin-bottom:8px">' + c.sub + '</div>' +
+      '<div style="font-size:26px;font-weight:800;color:' + c.color + ';margin-bottom:4px">' + pct.toFixed(1) + '%</div>' +
+      '<div style="background:#e5e7eb;border-radius:4px;height:7px;overflow:hidden;margin-bottom:9px"><div style="height:100%;border-radius:4px;background:' + c.color + ';width:' + pct + '%"></div></div>' +
+      '<div style="font-size:11px;color:#57606a;line-height:1.6;border-top:1px solid #f0f2f5;padding-top:8px">' + c.note + '</div></div>';
+  });
+}
+
+function anRenderTable(filter) {
+  const tbody = document.getElementById('an-table-body');
+  tbody.innerHTML = '';
+  AN_STUDENTS.forEach((s,i) => {
+    const r = anRisk(s);
+    if (filter==='high' && r!=='high') return;
+    if (filter==='med'  && r!=='med')  return;
+    if (filter==='low'  && r!=='low')  return;
+    if (filter==='fail' && s.jumlah>=50) return;
+    const rc = r==='high'?'an-risk-high':r==='med'?'an-risk-med':'an-risk-low';
+    tbody.innerHTML += '<tr class="' + rc + '">' +
+      '<td>' + (i+1) + '</td>' +
+      '<td style="text-align:left"><div style="font-weight:700;font-size:11px">' + s.name + '</div><div style="font-size:10px;color:#9ca3af">' + s.no + '</div></td>' +
+      '<td>' + s.k1.toFixed(2) + '</td>' +
+      '<td style="color:' + (s.ut1<50?'#dc2626':'#166534') + ';font-weight:' + (s.ut1<50?'800':'400') + '">' + s.ut1 + '</td>' +
+      '<td style="color:' + (s.t<50?'#dc2626':'#166534') + ';font-weight:' + (s.t<50?'800':'400') + '">' + s.t + '</td>' +
+      '<td>' + s.p1.toFixed(2) + '</td>' +
+      '<td>' + s.k2.toFixed(2) + '</td>' +
+      '<td>' + s.pb + '</td>' +
+      '<td style="font-weight:700;color:' + (s.jumlah<50?'#dc2626':'#1d4ed8') + '">' + s.jumlah + '</td>' +
+      '<td><span class="an-pill an-pill-red" style="font-size:9px">GKPA</span></td>' +
+      '<td>' + anPillRisk(r) + '</td></tr>';
+  });
+}
+
+function anFilter(type, btn) {
+  document.querySelectorAll('.an-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  anRenderTable(type);
+}
+
+/* â”€â”€ Init â”€â”€ */
+document.addEventListener('DOMContentLoaded', function() {
+  loadData();
+  updateGradeSim();
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('change', saveCurrentData);
+  });
+});
+</script>
+
+</body>
+</html>
+
